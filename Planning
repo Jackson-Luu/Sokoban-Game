@@ -18,7 +18,8 @@ Initial Questions:
     What sort of features are needed by different categories of users: how can the interface handle seemingly different requirements?
     
     What sort of help or hints (if any) should the system be able to provide to users (and how and when is this help given)?
-        - 
+        - Possibly implement hints to finish a puzzle(highlighted squares? string message hints?)
+        - Initial tutorial style hints?
     What platforms with what form factors is the system designed to run on?
     
 
