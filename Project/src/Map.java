@@ -23,8 +23,10 @@ public class Map {
     private int mapSizex;
     private int mapSizey;
 
-    public Map(int[][] input){
+    public Map(int[][] input, int mapSizex, int mapSizey){
         locations = input;
+        this.mapSizex = mapSizex;
+        this.mapSizey = mapSizey;
     }
     //
     public int[][] getLocations(){
@@ -65,5 +67,12 @@ public class Map {
             }
         }
         return 0;
+    }
+    
+    public ArrayList<Integer> getMapSize(){
+        ArrayList<Integer> returnArray = new ArrayList<Integer>();
+        returnArray.add(mapSizex);
+        returnArray.add(mapSizey);
+        return returnArray;
     }
 }
