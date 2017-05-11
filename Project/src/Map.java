@@ -19,6 +19,17 @@ Key for map
 8: goal tile with box on top
 */
 public class Map {
+    public static final int EMPTY = 0;
+    public static final int MOVE_UP = 1;
+    public static final int MOVE_RIGHT = 2;
+    public static final int MOVE_DOWN = 3;
+    public static final int MOVE_LEFT = 4;
+    public static final int MOVABLE_BOX = 5;
+    public static final int WALL = 6;
+    public static final int GOAL = 7;
+    public static final int FINISHED_GOAL = 8;
+
+
     private int[][] locations;
     private int mapSizex;
     private int mapSizey;
