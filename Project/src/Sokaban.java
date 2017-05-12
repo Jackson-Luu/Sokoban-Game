@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -11,8 +12,9 @@ import javax.swing.*;
 
 
 public class Sokaban extends JFrame implements ActionListener{
+	
 	JButton btnBack,btnFirst,btnNext,btnPrev,btnLast,btnSelect,btnMusic,btnReset;
-	JComboBox cbMusic;
+	JComboBox<String> cbMusic;
 	JMenuBar menuBar;
 	JMenu mnuOption,mnuSet,mnuHelp;
 	JMenuItem miReset,miPrev,miNext,miSelect,miExit,miBack;
@@ -26,26 +28,30 @@ public class Sokaban extends JFrame implements ActionListener{
 		"popo.mid",
 		"qin.mid"
 	};
-	
-	public Sokaban(){
+	//game panel
+	MyPanel mainPanel;
+	public Sokaban(int[][] samplemap){
 		super("Game 2017");
 		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage("pic/box1.png");
+		Image image = toolkit.getImage("pic/p0.jpg");
 		//set icon
 		this.setIconImage(image);
 		Container c = this.getContentPane();
 		c.setLayout(null);
 		c.setBackground(Color.orange);
 		
-		JLabel lblTitle = new JLabel("BOX GAME",JLabel.CENTER);
-		lblTitle.setFont(new Font("",Font.ITALIC,20));
+		JLabel lblTitle = new JLabel("SOKABAN GAME",JLabel.CENTER);
+		lblTitle.setFont(new Font("",Font.BOLD,20));
 		lblTitle.setBounds(100,20,500,30);
 		c.add(lblTitle,BorderLayout.NORTH);
 		//put buttons
 		setButton(c);
 		setMenus();
 		
+		mainPanel = new MyPanel(samplemap);
+		mainPanel.setBounds(60,120,450,450);
+		c.add(mainPanel);
 		setSize(720,720);
 		//setVisible(true);
 		this.setLocationRelativeTo(null);
@@ -76,7 +82,7 @@ public class Sokaban extends JFrame implements ActionListener{
 		btnMusic.addActionListener(this);
 		//cbMusic.addActionListener(this);
 		
-		cbMusic = new JComboBox();
+		cbMusic = new JComboBox<String>();
 		cbMusic.addItem("default");
 		cbMusic.addItem("good");
 		cbMusic.addItem("music");
@@ -162,17 +168,60 @@ public class Sokaban extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == miHelp){
+		if(e.getSource().equals(miHelp)){
 			String str = "COMP2911\n";
 			str +="Assignment3\n";
 			JOptionPane.showMessageDialog(this, str, "Help", JOptionPane.INFORMATION_MESSAGE);
-		} else if(e.getSource() == miExit){
+		} else if(e.getSource().equals(miExit)){
 			System.exit(0);
+		} else if(e.getSource().equals(btnReset)){
+			
+		} else if(e.getSource().equals(btnBack)){
+			
 		}
 	}
 	
 	//game panel
 	public class MyPanel extends JPanel{
+		private int[][] oriMap;
+		private int[][] tempMap;
 		
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		Image mapimg[] = {
+			kit.getImage("pic/0.png"),
+			kit.getImage("pic/1.gif"),
+			kit.getImage("pic/2.png"),
+			kit.getImage("pic/3.png"),
+			kit.getImage("pic/4.gif"),
+			kit.getImage("pic/5.GIF"),
+			kit.getImage("pic/6.GIF"),
+			kit.getImage("pic/7.GIF"),
+			kit.getImage("pic/8.GIF"),
+			kit.getImage("pic/9.png")
+		};
+		public int[][] getOriMap() {
+			return oriMap;
+		}
+		public void setOriMap(int[][] oriMap) {
+			this.oriMap = oriMap;
+		}
+		public MyPanel(int[][] map){
+			readMap(map);
+			setSize(600,600);
+			this.requestFocus();
+			repaint();
+		}
+		public void readMap(int[][] map){
+			this.oriMap = map;
+			this.tempMap = map;
+		}
+		@Override
+		public void paint(Graphics g){
+			for(int i = 0; i < 15; i++){
+				for(int j = 0; j< 15;j++){
+					g.drawImage(mapimg[this.tempMap[j][i]], i*30, j*30, 30,30,this);
+				}
+			}
+		}
 	}
 }
