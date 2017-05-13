@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * 
@@ -15,10 +16,117 @@ public class GameEngine {
 
     }
 
-    private int[][] generateMap(int x, int y){
+    private static final int WALL = 0;
+    private static final int FLOOR = 1;
+    private static final int BOX = 2;
+    private static final int GOAL = 3;
+    private static final int PLAYER = 4;
+
+    private static int[][] generateMap(int x, int y){
         int[][] map = new int[x][y];
-        //generate a map here
+        //int xChunks = x / 3;
+        //int yChunks = y / 3;
+        int boxes = genRandom(x/8, x/3); // upper bound is exclusive
+        int goals = boxes;
+        //int player = 1;
+        //int currChunk = 0;
+        //int lastChunk = xBlocks * yBlocks;
+        System.out.printf("Boxes: %d, Goals: %d \n", boxes, goals);
+        // Wall: 0
+        // Floor: 1
+        // Box : 2
+        // Goal: 3
+        // Player: 4
+        int nextTile;
+
+        // generate walls
+        for (int i = 0; i < x; i++ ) {
+            for (int j = 0; j < y; j++) {
+                nextTile = genRandom(0,6);
+                map[i][j] = (nextTile <= 3) ? FLOOR : WALL; // higher number = lower wall density
+            }
+        }
+
+        // generate boxes
+        for (int i = 1; i < x-1; i++) {
+            for (int j = 1; j < y-1; j++) {
+                nextTile = genRandom(0,4);
+                if (nextTile <= 2 && map[i][j] == FLOOR) {
+                    map[i][j] = FLOOR;
+                } else if (nextTile == 3 && map[i][j] == FLOOR && boxes > 0) {
+                    map[i][j] = BOX;
+                    boxes--;
+                }
+            }
+        }
+
+        // generate goal spaces away from boxes...
+        for (int i = x-2; i > 1; i--) {
+            for (int j = y-2; j > 1; j--) {
+                nextTile = genRandom(0,4);
+                if (nextTile <= 2 && map[i][j] == FLOOR) {
+                    map[i][j] = FLOOR;
+                } else if (nextTile == 3 && map[i][j] == FLOOR && goals > 0) {
+                    map[i][j] = GOAL;
+                    goals--;
+                }
+            }
+
+        }
+
+        // ensure no walls around starting area, boxes and goals
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (map[i][j] == WALL) map[i][j] = FLOOR;
+            }
+        }
+
+        for (int i = 1; i < x -1; i++) {
+            for (int j = 1; j < x -1; j++) {
+                if ((map[i][j] == BOX || map[i][j] == GOAL)) {
+                    if (map[i-1][j-1] == WALL) map[i-1][j-1] = FLOOR;
+                    if (map[i][j-1] == WALL) map[i][j-1] = FLOOR;
+                    if (map[i+1][j-1] == WALL) map[i+1][j-1] = FLOOR;
+                    if (map[i-1][j] == WALL) map[i-1][j] = FLOOR;
+                    if (map[i+1][j-1] == WALL) map[i+1][j] = FLOOR;
+                    if (map[i-1][j+1] == WALL) map[i-1][j+1] = FLOOR;
+                    if (map[i][j+1] == WALL) map[i][j+1] = FLOOR;
+                    if (map[i+1][j+1] == WALL) map[i+1][j+1] = FLOOR;
+                }
+            }
+        }
+
+        //ensure there is a path from top to bottom
+
+        // generate player
+        for (int j = 0; j < y; j++) {
+            if (map[0][j] == FLOOR) {
+                map[0][j] = PLAYER;
+                break;
+            }
+        }
+
+        // debug
+        int finalbox = 0;
+        int finalgoal = 0;
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if (map[i][j] == BOX) finalbox++;
+                if (map[i][j] == GOAL) finalgoal++;
+                System.out.printf("%d", map[i][j]);
+            }
+            System.out.println();
+
+        }
+        System.out.printf("EBoxes: %d, EGoals: %d\n", finalbox, finalgoal);
+        //
+
         return map;
+    }
+
+    private static int genRandom(int min, int max) {
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
     private Boolean checkValid(int move){
