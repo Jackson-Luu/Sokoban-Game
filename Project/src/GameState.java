@@ -1,9 +1,8 @@
-/**
- * 
- * @author Jackson Luu, Keller Huang, Dan Yoo, Evan Han and Lilac Liu
- *
- */
+import java.util.ArrayList;
 
+/**
+ * Created by mw on 9/05/2017.
+ */
 public class GameState {
     private int moves;
     //Time can be set to a different type later
@@ -16,6 +15,7 @@ public class GameState {
         this.currMap = currMap;
         moves = currMoves;
         this.time = time;
+        printMap();
     }
 
     public int getMoves(){
@@ -28,5 +28,16 @@ public class GameState {
 
     public Map getCurrMap(){
         return currMap;
+    }
+
+    public void printMap(){
+        int[][] map = currMap.getLocations();
+        ArrayList<Integer> mapsize = currMap.getMapSize();
+        for(int i = 0; i < mapsize.get(1); i++){
+            for(int m = 0; m < mapsize.get(0); m++){
+                System.out.printf("[" + map[i][m] + "]");
+            }
+            System.out.println();
+        }
     }
 }
