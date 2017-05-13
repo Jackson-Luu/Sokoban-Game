@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * 
+ *
  * @author Jackson Luu, Keller Huang, Dan Yoo, Evan Han and Lilac Liu
  *
  */
@@ -24,10 +24,11 @@ public class Map {
     public static final int MOVE_RIGHT = 2;
     public static final int MOVE_DOWN = 3;
     public static final int MOVE_LEFT = 4;
-    public static final int MOVABLE_BOX = 5;
+    public static final int BOX = 5;
     public static final int WALL = 6;
     public static final int GOAL = 7;
-    public static final int FINISHED_GOAL = 8;
+    public static final int GOAL_BOX = 8;
+    public static final int PLAYER_ON_GOAL = 9;
 
 
     private int[][] locations;
@@ -38,6 +39,7 @@ public class Map {
         locations = input;
         this.mapSizex = mapSizex;
         this.mapSizey = mapSizey;
+        System.out.println("First: " + mapSizey + " Second: " + mapSizex);
     }
     //
     public int[][] getLocations(){
@@ -46,19 +48,24 @@ public class Map {
     // a method that takes in an arraylist of x ordinates and y ordinates of tiles
     // that need to be changed and changes them to their respective value stored in changeTo
     public void changeTile(int xOrdinate, int yOrdinate, int changeTo){
-        locations[xOrdinate][yOrdinate] = changeTo;
+        System.out.println("Changing " + yOrdinate + " " + xOrdinate + " to " + changeTo);
+        locations[yOrdinate][xOrdinate] = changeTo;
     }
 
     public int checkTile(int xOrdinate, int yOrdinate){
-        return locations[xOrdinate][yOrdinate];
+        System.out.println("Checking " + yOrdinate  + " " + xOrdinate);
+        if(xOrdinate >= mapSizex || xOrdinate < 0)return -1;
+        if(yOrdinate >= mapSizey || yOrdinate < 0)return -1;
+        return locations[yOrdinate][xOrdinate];
     }
     //returns an arraylist with first value being x value and second being y value
     // if player not found returns empty
+
     public ArrayList<Integer> checkPlayerLocation(){
         ArrayList<Integer> locationArray = new ArrayList<Integer>();
-        for(int i = 0; i < mapSizex ; i++){
-            for(int m = 0; m < mapSizey; m++){
-                if(locations[i][m] >= 1 && locations[i][m] <= 4){
+        for(int i = 0; i < mapSizey ; i++){
+            for(int m = 0; m < mapSizex; m++){
+                if((locations[i][m] >= 1 && locations[i][m] <= 4) || locations[i][m] == 9){
                     locationArray.add(new Integer(i));
                     locationArray.add(new Integer(m));
                     return locationArray;
@@ -70,8 +77,8 @@ public class Map {
     //returns a number between 1-4 for the player's orientation
     //returns 0 if player not found
     public int getPlayerOrientation(){
-        for(int i = 0; i < mapSizex ; i++){
-            for(int m = 0; m < mapSizey; m++){
+        for(int i = 0; i < mapSizey ; i++){
+            for(int m = 0; m < mapSizex; m++){
                 if(locations[i][m] >= 1 && locations[i][m] <= 4){
                     return locations[i][m];
                 }
@@ -79,7 +86,7 @@ public class Map {
         }
         return 0;
     }
-    
+
     public ArrayList<Integer> getMapSize(){
         ArrayList<Integer> returnArray = new ArrayList<Integer>();
         returnArray.add(mapSizex);
