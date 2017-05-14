@@ -25,8 +25,8 @@ public class GameEngine {
     private static final int GOAL = Map.GOAL;
     private static final int PLAYER = Map.MOVE_UP;
 
-    private static final int WALL_DENSITY = 1;  // changes the amount of walls generated
-                                                // lower number = less walls. Range 0..5
+    private static final int WALL_DENSITY = 2;  // changes the amount of walls generated
+                                                // lower number = less walls. Range 0..10
 
     /*private int[][] generateMap(int x, int y){
         int[][] map = new int[x][y];
@@ -81,7 +81,7 @@ public class GameEngine {
         // generate walls
         for (int i = 0; i < x; i++ ) {
             for (int j = 0; j < y; j++) {
-                nextTile = genRandom(0,6);
+                nextTile = genRandom(0,11);
                 map[i][j] = (nextTile <= WALL_DENSITY) ? WALL : FLOOR;
             }
         }
@@ -145,9 +145,9 @@ public class GameEngine {
                 if (walls > x/2) { // over half the row is walls
                     for (i = 0; i < x; i++) {
                         if (map[i][j] == WALL) {
-                            nextTile = genRandom(0,2);
-                            if (nextTile == 1) {
-                                map[i][j] = FLOOR; //50% chance to change a wall to floor
+                            nextTile = genRandom(0,10);
+                            if (nextTile > 0) {
+                                map[i][j] = FLOOR; //80% chance to change a wall to floor
                             }
                         }
                     }
@@ -166,16 +166,20 @@ public class GameEngine {
         // debug
         int finalbox = 0;
         int finalgoal = 0;
+        int nWalls = 0;
+        int nFloors = 0;
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (map[i][j] == BOX) finalbox++;
                 if (map[i][j] == GOAL) finalgoal++;
+                if (map[i][j] == WALL) nWalls++;
+                if (map[i][j] == FLOOR) nFloors++;
                 System.out.printf("%d", map[i][j]);
             }
             System.out.println();
 
         }
-        System.out.printf("EBoxes: %d, EGoals: %d\n", finalbox, finalgoal);
+        System.out.printf("EBoxes: %d, EGoals: %d Walls: %d Floors: %d\n", finalbox, finalgoal, nWalls, nFloors);
         //
 
         return map;
