@@ -1,5 +1,4 @@
-
-public class Game2017{
+public class Game2017 {
 	public static void main(String[] args){
 		int[][] samplemap = {
 				
@@ -23,7 +22,8 @@ public class Game2017{
 				
 				
 		};
-		new Sokaban(samplemap);
-	}	
+		
+		new Sokoban(new GameEngine(15, 15));	
+	}
 }	
 
