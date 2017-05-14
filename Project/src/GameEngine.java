@@ -317,6 +317,7 @@ public class GameEngine {
         }
         GameState updated = new GameState(functionMap,0,0);
         currGame = updated;
+        currGameStates.add(updated);
     }
 
     private ArrayList<Integer> augment(int xLoc, int yLoc, int move){
@@ -340,11 +341,17 @@ public class GameEngine {
     	return this.currGame;
     }
     
-    public void setState(GameState gS) {
-    	this.currGame = gS;
+    public void resetState() {
+    	currGame = new GameState(currGameStates.get(0).getCurrMap(), 0, 0);
+    	currGameStates.clear();
+    	currGameStates.add(currGame);
     }
     
-    public GameState resetState() {
-    	return currGameStates.get(0);
+    public void prevState() {
+    	if (currGameStates.size() == 0 || currGameStates.size() == 1) {
+    		return;
+    	}
+    	currGame = currGameStates.get(currGameStates.size() - 2);
+    	currGameStates.remove(currGameStates.size() - 1);
     }
 }
