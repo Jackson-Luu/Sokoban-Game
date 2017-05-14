@@ -25,6 +25,9 @@ public class GameEngine {
     private static final int GOAL = Map.GOAL;
     private static final int PLAYER = Map.MOVE_UP;
 
+    private static final int WALL_DENSITY = 1;  // changes the amount of walls generated
+                                                // lower number = less walls. Range 0..5
+
     /*private int[][] generateMap(int x, int y){
         int[][] map = new int[x][y];
         int[][] samplemap = {
@@ -79,7 +82,7 @@ public class GameEngine {
         for (int i = 0; i < x; i++ ) {
             for (int j = 0; j < y; j++) {
                 nextTile = genRandom(0,6);
-                map[i][j] = (nextTile <= 4) ? FLOOR : WALL; // higher number = lower wall density
+                map[i][j] = (nextTile <= WALL_DENSITY) ? WALL : FLOOR;
             }
         }
 
@@ -132,7 +135,25 @@ public class GameEngine {
             }
         }
 
-        //ensure there is a path from top to bottom
+        //reduce the amount of walls in rows with potentially too many
+        for (int j = 0; j < y; j++) {
+            for (int i = 0; i < x; i++) {
+                int walls = 0;
+                if (map[i][j] == WALL) {
+                    walls++;
+                }
+                if (walls > x/2) { // over half the row is walls
+                    for (i = 0; i < x; i++) {
+                        if (map[i][j] == WALL) {
+                            nextTile = genRandom(0,2);
+                            if (nextTile == 1) {
+                                map[i][j] = FLOOR; //50% chance to change a wall to floor
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // generate player
         for (int j = 0; j < y; j++) {
