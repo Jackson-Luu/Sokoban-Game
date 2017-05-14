@@ -19,11 +19,11 @@ public class GameEngine {
         Boolean quit = false;
     }
 
-    private static final int WALL = 0;
-    private static final int FLOOR = 1;
-    private static final int BOX = 2;
-    private static final int GOAL = 3;
-    private static final int PLAYER = 4;
+    private static final int WALL = Map.WALL;
+    private static final int FLOOR = Map.EMPTY;
+    private static final int BOX = Map.BOX;
+    private static final int GOAL = Map.GOAL;
+    private static final int PLAYER = Map.MOVE_UP;
 
     /*private int[][] generateMap(int x, int y){
         int[][] map = new int[x][y];
