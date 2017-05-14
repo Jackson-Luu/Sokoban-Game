@@ -168,7 +168,7 @@ public class Sokoban extends JFrame implements ActionListener{
 		} else if(e.getSource().equals(btnReset)){
 			game.setState(game.resetState());
 		} else if(e.getSource().equals(btnBack)){
-			
+			game.prevState();
 		}
 		
 		c.remove(mainPanel);
