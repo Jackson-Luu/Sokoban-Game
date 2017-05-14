@@ -268,13 +268,13 @@ public class GameEngine {
             System.out.println(xLoc + " " +yLoc);
             if(functionMap.checkTile(xLoc,yLoc) == Map.EMPTY || functionMap.checkTile(xLoc,yLoc) == Map.GOAL){
                 if(functionMap.checkTile(xLoc,yLoc) == Map.EMPTY)
-                    functionMap.changeTile(xLoc,yLoc,Map.MOVE_UP);
+                    functionMap.changeTile(xLoc,yLoc,move);
                 if(functionMap.checkTile(xLoc,yLoc) == Map.GOAL)
                     functionMap.changeTile(xLoc,yLoc,Map.PLAYER_ON_GOAL);
             }else if(functionMap.checkTile(xLoc,yLoc) == Map.BOX || functionMap.checkTile(xLoc,yLoc) == Map.GOAL_BOX){
                 //if there's a box
                 if(functionMap.checkTile(xLoc,yLoc) == Map.BOX){
-                    functionMap.changeTile(xLoc,yLoc,Map.MOVE_UP);
+                    functionMap.changeTile(xLoc,yLoc,move);
                 }else if(functionMap.checkTile(xLoc,yLoc) == Map.GOAL_BOX){
                     functionMap.changeTile(xLoc,yLoc,Map.PLAYER_ON_GOAL);
                 }
