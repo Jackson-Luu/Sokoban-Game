@@ -208,7 +208,7 @@ public class Sokoban extends JFrame implements ActionListener{
         	int key = e.getKeyCode();
 
             if (key == KeyEvent.VK_LEFT) {
-            	game.makeMove(Map.MOVE_DOWN);
+            	game.makeMove(Map.MOVE_LEFT);
             }
 
             if (key == KeyEvent.VK_RIGHT) {
