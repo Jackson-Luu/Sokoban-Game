@@ -118,9 +118,6 @@ public class Sokoban extends JFrame implements ActionListener{
 		
 		 mnuOption.add(miBack);
 		 mnuOption.add(miReset);
-		 mnuOption.add(miPrev);
-		 mnuOption.add(miNext);
-		 mnuOption.add(miSelect);
 		 mnuOption.addSeparator();
 		 mnuOption.add(miExit);
 		
