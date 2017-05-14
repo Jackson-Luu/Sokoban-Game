@@ -154,7 +154,6 @@ public class Sokoban extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource().equals(miHelp)){
 			String str = "COMP2911\n";
 			str +="Assignment3\n";
@@ -162,7 +161,7 @@ public class Sokoban extends JFrame implements ActionListener{
 		} else if(e.getSource().equals(miExit)){
 			System.exit(0);
 		} else if(e.getSource().equals(btnReset)){
-			
+			game.setState(game.resetState());
 		} else if(e.getSource().equals(btnBack)){
 			
 		}
