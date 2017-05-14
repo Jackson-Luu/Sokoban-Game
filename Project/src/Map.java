@@ -36,9 +36,10 @@ public class Map {
     private int mapSizey;
 
     public Map(int[][] input, int mapSizex, int mapSizey){
-        locations = input;
         this.mapSizex = mapSizex;
         this.mapSizey = mapSizey;
+        locations = new int[mapSizey][mapSizex];
+        initLocations(input);
         System.out.println("First: " + mapSizey + " Second: " + mapSizex);
     }
     //
@@ -92,5 +93,18 @@ public class Map {
         returnArray.add(mapSizex);
         returnArray.add(mapSizey);
         return returnArray;
+    }
+    
+    //Creates a deep copy of the matrix.
+    private void initLocations(int[][] input) {
+    	if (input == null) {
+            return;
+        }
+
+        for (int i = 0; i < mapSizey; i++) {
+        	for (int j = 0; j < mapSizex; j++) {
+        		locations[i][j] = input[i][j];
+        	}
+        }
     }
 }
