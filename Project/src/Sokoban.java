@@ -110,9 +110,6 @@ public class Sokoban extends JFrame implements ActionListener{
 	public void setMenus(){
 		mnuOption = new JMenu("Option");
 		 miReset = new JMenuItem("Reset");
-		 miPrev = new JMenuItem("Previous");
-		 miNext = new JMenuItem("Next");
-		 miSelect = new JMenuItem("Select");
 		 miExit = new JMenuItem("Exit");
 		 miBack = new JMenuItem("Back");
 		
