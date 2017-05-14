@@ -15,11 +15,11 @@ import javax.swing.*;
 
 public class Sokoban extends JFrame implements ActionListener{
 	
-	JButton btnBack,btnFirst,btnNext,btnPrev,btnLast,btnSelect,btnMusic,btnReset;
+	JButton btnBack,btnMusic,btnReset;
 	JComboBox<String> cbMusic;
 	JMenuBar menuBar;
 	JMenu mnuOption,mnuSet,mnuHelp;
-	JMenuItem miReset,miPrev,miNext,miSelect,miExit,miBack;
+	JMenuItem miReset,miExit,miBack;
 	JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
 	JMenuItem miHelp;
 	//music file
@@ -78,22 +78,12 @@ public class Sokoban extends JFrame implements ActionListener{
 	public void setButton(Container c){
 		btnReset = new JButton("Reset");
 		btnBack = new JButton("Back");
-		btnFirst = new JButton("First");
-		btnNext = new JButton("Next");
-		btnPrev = new JButton("Prev");
-		btnLast = new JButton("Last");
-		btnSelect = new JButton("Select");
 		btnMusic = new JButton("Music");
 		JLabel lblMusic = new JLabel("Select Music");
 		c.add(lblMusic);
 		
 		btnReset.addActionListener(this);
 		btnBack.addActionListener(this);
-		btnFirst.addActionListener(this);
-		btnNext.addActionListener(this);
-		btnPrev.addActionListener(this);
-		btnLast.addActionListener(this);
-		btnSelect.addActionListener(this);
 		btnMusic.addActionListener(this);
 		//cbMusic.addActionListener(this);
 		
@@ -104,23 +94,13 @@ public class Sokoban extends JFrame implements ActionListener{
 		cbMusic.addItem("choose");
 		cbMusic.addItem("column");
 		
-		btnReset.setBounds(600,100,80,30);
-		btnBack.setBounds(600,150,80,30);
-		btnFirst.setBounds(600,200,80,30);
-		btnNext.setBounds(600,250,80,30);
-		btnPrev.setBounds(600,300,80,30);
-		btnLast.setBounds(600,350,80,30);
-		btnSelect.setBounds(600,400,80,30);
-		btnMusic.setBounds(600,450,80,30);
-		lblMusic.setBounds(600, 500, 80, 30);
-		cbMusic.setBounds(600, 530, 80, 30);
+		btnReset.setBounds(550,250,80,30);
+		btnBack.setBounds(550,300,80,30);
+		btnMusic.setBounds(550,350,80,30);
+		lblMusic.setBounds(550, 400, 80, 30);
+		cbMusic.setBounds(550, 430, 80, 30);
 		c.add(btnReset);
 		c.add(btnBack);
-		c.add(btnFirst);
-		c.add(btnNext);
-		c.add(btnPrev);
-		c.add(btnLast);
-		c.add(btnSelect);
 		c.add(btnMusic);
 		c.add(cbMusic);
 	}
@@ -163,9 +143,7 @@ public class Sokoban extends JFrame implements ActionListener{
 		 
 		 miBack.addActionListener(this);
 		 miReset.addActionListener(this);
-		 miPrev.addActionListener(this);
-		 miNext.addActionListener(this);
-		 miSelect.addActionListener(this);
+		 miExit.addActionListener(this);
 		 miMusic1.addActionListener(this);
 		 miMusic2.addActionListener(this);
 		 miMusic3.addActionListener(this);
