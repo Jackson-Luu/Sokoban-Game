@@ -7,11 +7,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
 
-public class Sokaban extends JFrame implements ActionListener{
+public class Sokoban extends JFrame implements ActionListener{
 	
 	JButton btnBack,btnFirst,btnNext,btnPrev,btnLast,btnSelect,btnMusic,btnReset;
 	JComboBox<String> cbMusic;
@@ -28,16 +30,19 @@ public class Sokaban extends JFrame implements ActionListener{
 		"popo.mid",
 		"qin.mid"
 	};
+	GameEngine game;
+	Container c;
+	
 	//game panel
 	MyPanel mainPanel;
-	public Sokaban(int[][] samplemap){
+	public Sokoban(GameEngine currGame){
 		super("Game 2017");
 		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image image = toolkit.getImage("pic/p0.jpg");
 		//set icon
 		this.setIconImage(image);
-		Container c = this.getContentPane();
+		c = this.getContentPane();
 		c.setLayout(null);
 		c.setBackground(Color.orange);
 		
@@ -49,11 +54,21 @@ public class Sokaban extends JFrame implements ActionListener{
 		setButton(c);
 		setMenus();
 		
-		mainPanel = new MyPanel(samplemap);
+		game = currGame;
+		createPanel(c);
+		
+		//keyboard input code
+		addKeyListener(new TAdapter());
+		setFocusable(true);
+        Timer timer = new Timer(1000, this);
+        timer.start();		
+	}
+	
+	public void createPanel(Container con) {
+		mainPanel = new MyPanel(game.getState().getCurrMap().getLocations());
 		mainPanel.setBounds(60,120,450,450);
-		c.add(mainPanel);
+		con.add(mainPanel);
 		setSize(720,720);
-		//setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -179,10 +194,39 @@ public class Sokaban extends JFrame implements ActionListener{
 		} else if(e.getSource().equals(btnBack)){
 			
 		}
+		
+		c.remove(mainPanel);
+		createPanel(c);
+		c.revalidate();
+		c.repaint();
 	}
 	
+	private class TAdapter extends KeyAdapter {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+        	int key = e.getKeyCode();
+
+            if (key == KeyEvent.VK_LEFT) {
+            	game.makeMove(Map.MOVE_DOWN);
+            }
+
+            if (key == KeyEvent.VK_RIGHT) {
+            	game.makeMove(Map.MOVE_RIGHT);
+            }
+
+            if (key == KeyEvent.VK_UP) {
+            	game.makeMove(Map.MOVE_UP);
+            }
+
+            if (key == KeyEvent.VK_DOWN) {
+            	game.makeMove(Map.MOVE_DOWN);
+            }
+        }
+    }
+	
 	//game panel
-	public class MyPanel extends JPanel{
+	class MyPanel extends JPanel{
 		private int[][] oriMap;
 		private int[][] tempMap;
 		
