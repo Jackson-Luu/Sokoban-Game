@@ -87,6 +87,11 @@ public class Sokoban extends JFrame implements ActionListener{
 		btnMusic.addActionListener(this);
 		//cbMusic.addActionListener(this);
 		
+		//Stops game freezing after button press.
+		btnReset.setFocusable(false);
+		btnBack.setFocusable(false);
+		btnMusic.setFocusable(false);
+		
 		cbMusic = new JComboBox<String>();
 		cbMusic.addItem("default");
 		cbMusic.addItem("good");
