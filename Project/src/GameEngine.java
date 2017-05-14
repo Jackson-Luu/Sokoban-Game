@@ -79,7 +79,7 @@ public class GameEngine {
         for (int i = 0; i < x; i++ ) {
             for (int j = 0; j < y; j++) {
                 nextTile = genRandom(0,6);
-                map[i][j] = (nextTile <= 3) ? FLOOR : WALL; // higher number = lower wall density
+                map[i][j] = (nextTile <= 4) ? FLOOR : WALL; // higher number = lower wall density
             }
         }
 
