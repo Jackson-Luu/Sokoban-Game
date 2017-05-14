@@ -308,4 +308,8 @@ public class GameEngine {
         ret.add(yLoc);
         return ret;
     }
+    
+    public GameState getState() {
+    	return this.currGame;
+    }
 }
