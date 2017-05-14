@@ -11,9 +11,12 @@ public class GameEngine {
     GameState currGame;
     int gameSizex;
     int gameSizey;
+    ArrayList<GameState> currGameStates;
     //move currently takes in a number between 1-4 corresponding to up, right, down, and left respectively
     public GameEngine(int gameSizex, int gameSizey){
-        currGame = new GameState(new Map(generateMap(gameSizex,gameSizey),gameSizex,gameSizey) , 0 , 0);
+        currGameStates = new ArrayList<>();
+        currGameStates.add(new GameState(new Map(generateMap(gameSizex,gameSizey),gameSizex,gameSizey) , 0 , 0));
+        currGame = currGameStates.get(0);
         this.gameSizex = gameSizex;
         this.gameSizey = gameSizey;
         Boolean quit = false;
@@ -335,5 +338,13 @@ public class GameEngine {
     
     public GameState getState() {
     	return this.currGame;
+    }
+    
+    public void setState(GameState gS) {
+    	this.currGame = gS;
+    }
+    
+    public GameState resetState() {
+    	return currGameStates.get(0);
     }
 }
