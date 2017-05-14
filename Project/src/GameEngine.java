@@ -268,8 +268,7 @@ public class GameEngine {
     }
 
     public void makeMove(int move){
-        Map functionMap = currGame.getCurrMap();
-        functionMap = new Map(currGame.getCurrMap().getLocations(),gameSizex,gameSizey);
+        Map functionMap = new Map(currGame.getCurrMap().getLocations(),gameSizex,gameSizey);
         ArrayList<Integer> playerLoc = functionMap.checkPlayerLocation();
         int yLoc = playerLoc.get(0);
         int xLoc = playerLoc.get(1);
