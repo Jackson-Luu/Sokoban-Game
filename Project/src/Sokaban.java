@@ -60,7 +60,7 @@ public class Sokoban extends JFrame implements ActionListener{
 		//keyboard input code
 		addKeyListener(new TAdapter());
 		setFocusable(true);
-        Timer timer = new Timer(1000, this);
+        Timer timer = new Timer(200, this);
         timer.start();		
 	}
 	
