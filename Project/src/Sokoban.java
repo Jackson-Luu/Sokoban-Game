@@ -15,13 +15,14 @@ import javax.swing.*;
 
 public class Sokoban extends JFrame implements ActionListener{
 	
-	JButton btnBack,btnMusic,btnReset;
+	JButton btnBack,btnMusic,btnReset,btnNewGame;
 	JComboBox<String> cbMusic;
 	JMenuBar menuBar;
 	JMenu mnuOption,mnuSet,mnuHelp;
 	JMenuItem miReset,miExit,miBack;
 	JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
 	JMenuItem miHelp;
+	Boolean Completed;
 	//music file
 	String sMusic[] = {
 		"eyes on me.mid",
@@ -37,7 +38,7 @@ public class Sokoban extends JFrame implements ActionListener{
 	MyPanel mainPanel;
 	public Sokoban(GameEngine currGame){
 		super("Game 2017");
-		
+		Completed = false;
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image image = toolkit.getImage("pic/p0.jpg");
 		//set icon
@@ -78,19 +79,22 @@ public class Sokoban extends JFrame implements ActionListener{
 	public void setButton(Container c){
 		btnReset = new JButton("Reset");
 		btnBack = new JButton("Back");
-		btnMusic = new JButton("Music");
+		btnMusic = new JButton("Music \nON/OFF");
+		btnNewGame = new JButton("New Game");
 		JLabel lblMusic = new JLabel("Select Music");
 		c.add(lblMusic);
 		
 		btnReset.addActionListener(this);
 		btnBack.addActionListener(this);
 		btnMusic.addActionListener(this);
+		btnNewGame.addActionListener(this);
 		//cbMusic.addActionListener(this);
 		
 		//Stops game freezing after button press.
 		btnReset.setFocusable(false);
 		btnBack.setFocusable(false);
 		btnMusic.setFocusable(false);
+		btnNewGame.setFocusable(false);
 		
 		cbMusic = new JComboBox<String>();
 		cbMusic.addItem("default");
@@ -99,11 +103,13 @@ public class Sokoban extends JFrame implements ActionListener{
 		cbMusic.addItem("choose");
 		cbMusic.addItem("column");
 		
-		btnReset.setBounds(550,250,80,30);
-		btnBack.setBounds(550,300,80,30);
-		btnMusic.setBounds(550,350,80,30);
-		lblMusic.setBounds(550, 400, 80, 30);
-		cbMusic.setBounds(550, 430, 80, 30);
+		btnNewGame.setBounds(550,200,120,30);
+		btnReset.setBounds(550,250,120,30);
+		btnBack.setBounds(550,300,120,30);
+		btnMusic.setBounds(550,350,120,30);
+		lblMusic.setBounds(550, 400, 120, 30);
+		cbMusic.setBounds(550, 430, 120, 30);
+		c.add(btnNewGame);
 		c.add(btnReset);
 		c.add(btnBack);
 		c.add(btnMusic);
@@ -159,6 +165,11 @@ public class Sokoban extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(game.isFinished() && !Completed){
+			Completed = true;
+			String finished = "You Win!";
+			JOptionPane.showMessageDialog(this, finished, "Help", JOptionPane.INFORMATION_MESSAGE);
+		}
 		if(e.getSource().equals(miHelp)){
 			String str = "COMP2911\n";
 			str +="Assignment3\n";
@@ -166,9 +177,12 @@ public class Sokoban extends JFrame implements ActionListener{
 		} else if(e.getSource().equals(miExit)){
 			System.exit(0);
 		} else if(e.getSource().equals(btnReset)){
-			game.setState(game.resetState());
+			game.resetState();
 		} else if(e.getSource().equals(btnBack)){
 			game.prevState();
+		} else if(e.getSource().equals(btnNewGame)){
+			Completed = false;
+			game.newGame();
 		}
 		
 		c.remove(mainPanel);
@@ -229,7 +243,7 @@ public class Sokoban extends JFrame implements ActionListener{
 			readMap(map);
 			setSize(600,600);
 			this.requestFocus();
-			repaint();
+			//repaint();
 		}
 		public void readMap(int[][] map){
 			this.oriMap = map;
