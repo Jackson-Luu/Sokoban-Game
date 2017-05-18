@@ -26,7 +26,7 @@ public class GameEngine {
     private static final int FLOOR = Map.EMPTY;
     private static final int BOX = Map.BOX;
     private static final int GOAL = Map.GOAL;
-    private static final int PLAYER = Map.MOVE_UP;
+    private static final int PLAYER = Map.MOVE_DOWN;
 
     private static final int WALL_DENSITY = 2;  // changes the amount of walls generated
                                                 // lower number = less walls. Range 0..10
@@ -34,8 +34,6 @@ public class GameEngine {
     /*private int[][] generateMap(int x, int y){
         int[][] map = new int[x][y];
         int[][] samplemap = {
-
-
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -53,13 +51,9 @@ public class GameEngine {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
         int[][] samplemap2 = {
-
-
                 {0, 0, 0, 0, 1, 0, 0},
                 {0, 0, 0, 0, 8, 0, 0},
-
         };
-
         //generate a map here
         return samplemap2;
     }*/
@@ -314,6 +308,8 @@ public class GameEngine {
                     functionMap.changeTile(xLoc,yLoc,Map.GOAL_BOX);
                 }
             }
+        }else{
+        	functionMap.changeTile(xLoc,yLoc,move);
         }
         GameState updated = new GameState(functionMap,0,0);
         currGame = updated;
@@ -353,5 +349,24 @@ public class GameEngine {
     	}
     	currGame = currGameStates.get(currGameStates.size() - 2);
     	currGameStates.remove(currGameStates.size() - 1);
+    }
+    
+    public void newGame(){
+    	currGameStates = new ArrayList<>();
+        currGameStates.add(new GameState(new Map(generateMap(gameSizex,gameSizey),gameSizex,gameSizey) , 0 , 0));
+        currGame = currGameStates.get(0);
+    }
+    
+    public Boolean isFinished(){
+    	int[][] checker;
+    	checker = currGame.getCurrMap().getLocations();
+    	for(int i = 0; i < gameSizex; i++){
+    		for(int m = 0; m < gameSizey; m++){
+    			if(checker[m][i] == Map.BOX){
+    				return false;
+    			}
+    		}
+    	}
+    	return true;
     }
 }
