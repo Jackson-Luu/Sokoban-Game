@@ -61,7 +61,7 @@ public class Sokoban extends JFrame implements ActionListener{
 		//keyboard input code
 		addKeyListener(new TAdapter());
 		setFocusable(true);
-        Timer timer = new Timer(100, this);
+        Timer timer = new Timer(10, this);
         timer.start();		
 	}
 	
@@ -102,6 +102,7 @@ public class Sokoban extends JFrame implements ActionListener{
 		cbMusic.addItem("music");
 		cbMusic.addItem("choose");
 		cbMusic.addItem("column");
+		cbMusic.setFocusable(false);
 		
 		btnNewGame.setBounds(550,200,120,30);
 		btnReset.setBounds(550,250,120,30);
