@@ -3,34 +3,49 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
 
-public class Sokoban extends JFrame implements ActionListener{
+public class Sokoban extends JFrame implements ActionListener,ItemListener{
 	
-	JButton btnBack,btnMusic,btnReset,btnNewGame;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JButton btnBack,btnMusic,btnReset;
 	JComboBox<String> cbMusic;
 	JMenuBar menuBar;
 	JMenu mnuOption,mnuSet,mnuHelp;
 	JMenuItem miReset,miExit,miBack;
 	JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
 	JMenuItem miHelp;
-	Boolean Completed;
 	//music file
 	String sMusic[] = {
-		"eyes on me.mid",
-		"guang.mid",
-		"nor.mid",
-		"popo.mid",
-		"qin.mid"
+		"casino.mid",
+		"forest.mid",
+		"luf2casino.mid",
+		"party.mid",
+		"tom.mid"
 	};
+	String musicName[]={
+			"Casino",
+			"Forest",
+			"Jumper",
+			"party",
+			"Go ahead"
+			
+	};
+	Music music;
 	GameEngine game;
 	Container c;
 	
@@ -38,16 +53,16 @@ public class Sokoban extends JFrame implements ActionListener{
 	MyPanel mainPanel;
 	public Sokoban(GameEngine currGame){
 		super("Game 2017");
-		Completed = false;
+		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage("pic/p0.jpg");
+		Image image = toolkit.getImage("pic/0.png");
 		//set icon
 		this.setIconImage(image);
 		c = this.getContentPane();
 		c.setLayout(null);
 		c.setBackground(Color.orange);
 		
-		JLabel lblTitle = new JLabel("SOKABAN GAME",JLabel.CENTER);
+		JLabel lblTitle = new JLabel("SOKOBAN GAME",JLabel.CENTER);
 		lblTitle.setFont(new Font("",Font.BOLD,20));
 		lblTitle.setBounds(100,20,500,30);
 		c.add(lblTitle,BorderLayout.NORTH);
@@ -55,13 +70,15 @@ public class Sokoban extends JFrame implements ActionListener{
 		setButton(c);
 		setMenus();
 		
+		music = new Music();
+		
 		game = currGame;
 		createPanel(c);
 		
 		//keyboard input code
 		addKeyListener(new TAdapter());
 		setFocusable(true);
-        Timer timer = new Timer(10, this);
+        Timer timer = new Timer(100, this);
         timer.start();		
 	}
 	
@@ -79,38 +96,26 @@ public class Sokoban extends JFrame implements ActionListener{
 	public void setButton(Container c){
 		btnReset = new JButton("Reset");
 		btnBack = new JButton("Back");
-		btnMusic = new JButton("Music \nON/OFF");
-		btnNewGame = new JButton("New Game");
+		btnMusic = new JButton("Music Off");
+		cbMusic = new JComboBox<String>(musicName);
 		JLabel lblMusic = new JLabel("Select Music");
 		c.add(lblMusic);
 		
 		btnReset.addActionListener(this);
 		btnBack.addActionListener(this);
 		btnMusic.addActionListener(this);
-		btnNewGame.addActionListener(this);
-		//cbMusic.addActionListener(this);
+		cbMusic.addItemListener(this);
 		
 		//Stops game freezing after button press.
 		btnReset.setFocusable(false);
 		btnBack.setFocusable(false);
 		btnMusic.setFocusable(false);
-		btnNewGame.setFocusable(false);
 		
-		cbMusic = new JComboBox<String>();
-		cbMusic.addItem("default");
-		cbMusic.addItem("good");
-		cbMusic.addItem("music");
-		cbMusic.addItem("choose");
-		cbMusic.addItem("column");
-		cbMusic.setFocusable(false);
-		
-		btnNewGame.setBounds(550,200,120,30);
-		btnReset.setBounds(550,250,120,30);
-		btnBack.setBounds(550,300,120,30);
-		btnMusic.setBounds(550,350,120,30);
-		lblMusic.setBounds(550, 400, 120, 30);
-		cbMusic.setBounds(550, 430, 120, 30);
-		c.add(btnNewGame);
+		btnReset.setBounds(550,250,80,30);
+		btnBack.setBounds(550,300,80,30);
+		btnMusic.setBounds(550,350,80,30);
+		lblMusic.setBounds(550, 400, 80, 30);
+		cbMusic.setBounds(550, 430, 80, 30);
 		c.add(btnReset);
 		c.add(btnBack);
 		c.add(btnMusic);
@@ -166,11 +171,6 @@ public class Sokoban extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(game.isFinished() && !Completed){
-			Completed = true;
-			String finished = "You Win!";
-			JOptionPane.showMessageDialog(this, finished, "Help", JOptionPane.INFORMATION_MESSAGE);
-		}
 		if(e.getSource().equals(miHelp)){
 			String str = "COMP2911\n";
 			str +="Assignment3\n";
@@ -181,9 +181,49 @@ public class Sokoban extends JFrame implements ActionListener{
 			game.resetState();
 		} else if(e.getSource().equals(btnBack)){
 			game.prevState();
-		} else if(e.getSource().equals(btnNewGame)){
-			Completed = false;
-			game.newGame();
+		} else if(e.getSource().equals(btnMusic)){
+			String state = btnMusic.getText();
+			if(state.equals("Music Off")){
+				if(music.isPlay()){
+					music.stopMusic();
+				}
+				btnMusic.setText("Music On");	
+			} else {
+				btnMusic.setText("Music Off");
+				music.loadSound();
+			}
+			
+			
+	    } else if(e.getSource().equals(miMusic1)){
+			music.setMusic(sMusic[0]);
+			if(music.isPlay()){
+				music.stopMusic();
+			}
+			music.loadSound();
+		} else if(e.getSource().equals(miMusic2)){
+			music.setMusic(sMusic[1]);
+			if(music.isPlay()){
+				music.stopMusic();
+			}
+			music.loadSound();
+		} else if(e.getSource().equals(miMusic3)){
+			music.setMusic(sMusic[2]);
+			if(music.isPlay()){
+				music.stopMusic();
+			}
+			music.loadSound();
+		} else if(e.getSource().equals(miMusic4)){
+			music.setMusic(sMusic[3]);
+			if(music.isPlay()){
+				music.stopMusic();
+			}
+			music.loadSound();
+		} else if(e.getSource().equals(miMusic5)){
+			music.setMusic(sMusic[4]);
+			if(music.isPlay()){
+				music.stopMusic();
+			}
+			music.loadSound();
 		}
 		
 		c.remove(mainPanel);
@@ -218,6 +258,10 @@ public class Sokoban extends JFrame implements ActionListener{
 	
 	//game panel
 	class MyPanel extends JPanel{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private int[][] oriMap;
 		private int[][] tempMap;
 		
@@ -244,12 +288,14 @@ public class Sokoban extends JFrame implements ActionListener{
 			readMap(map);
 			setSize(600,600);
 			this.requestFocus();
-			//repaint();
+			repaint();
 		}
 		public void readMap(int[][] map){
 			this.oriMap = map;
 			this.tempMap = map;
 		}
+		
+
 		@Override
 		public void paint(Graphics g){
 			for(int i = 0; i < 15; i++){
@@ -258,5 +304,17 @@ public class Sokoban extends JFrame implements ActionListener{
 				}
 			}
 		}
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		int index = cbMusic.getSelectedIndex();
+		String fileName = sMusic[index];
+		music.setMusic(fileName);
+		if(music.isPlay()){
+			music.stopMusic();
+		}
+		music.loadSound();
 	}
 }
