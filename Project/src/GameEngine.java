@@ -29,7 +29,7 @@ public class GameEngine {
     private static final int PLAYER = Map.MOVE_DOWN;
 
     private static final int WALL_DENSITY = 2;  // changes the amount of walls generated
-                                                // lower number = less walls. Range 0..10
+    // lower number = less walls. Range 0..10
 
     /*private int[][] generateMap(int x, int y){
         int[][] map = new int[x][y];
@@ -276,7 +276,7 @@ public class GameEngine {
         if(checkValid(move)){
             System.out.println("VALID");
             //removing player from current tile
-            if(functionMap.checkTile(xLoc,yLoc) == Map.PLAYER_ON_GOAL){
+            if(functionMap.checkTile(xLoc,yLoc) >= Map.PLAYER_ON_GOAL_UP && functionMap.checkTile(xLoc,yLoc) <= Map.PLAYER_ON_GOAL_LEFT){
                 functionMap.changeTile(xLoc,yLoc, Map.GOAL);
             }else if(functionMap.checkTile(xLoc,yLoc) >= 1 && functionMap.checkTile(xLoc,yLoc) <= 4){
                 System.out.println("EMPTY");
@@ -291,13 +291,13 @@ public class GameEngine {
                 if(functionMap.checkTile(xLoc,yLoc) == Map.EMPTY)
                     functionMap.changeTile(xLoc,yLoc,move);
                 if(functionMap.checkTile(xLoc,yLoc) == Map.GOAL)
-                    functionMap.changeTile(xLoc,yLoc,Map.PLAYER_ON_GOAL);
+                    functionMap.changeTile(xLoc,yLoc,move+8);
             }else if(functionMap.checkTile(xLoc,yLoc) == Map.BOX || functionMap.checkTile(xLoc,yLoc) == Map.GOAL_BOX){
                 //if there's a box
                 if(functionMap.checkTile(xLoc,yLoc) == Map.BOX){
                     functionMap.changeTile(xLoc,yLoc,move);
                 }else if(functionMap.checkTile(xLoc,yLoc) == Map.GOAL_BOX){
-                    functionMap.changeTile(xLoc,yLoc,Map.PLAYER_ON_GOAL);
+                    functionMap.changeTile(xLoc,yLoc,move+8);
                 }
                 loc = augment(xLoc,yLoc,move);
                 xLoc = loc.get(0);
@@ -309,7 +309,7 @@ public class GameEngine {
                 }
             }
         }else{
-        	functionMap.changeTile(xLoc,yLoc,move);
+            functionMap.changeTile(xLoc,yLoc,move);
         }
         GameState updated = new GameState(functionMap,0,0);
         currGame = updated;
@@ -332,41 +332,41 @@ public class GameEngine {
         ret.add(yLoc);
         return ret;
     }
-    
+
     public GameState getState() {
-    	return this.currGame;
+        return this.currGame;
     }
-    
+
     public void resetState() {
-    	currGame = new GameState(currGameStates.get(0).getCurrMap(), 0, 0);
-    	currGameStates.clear();
-    	currGameStates.add(currGame);
+        currGame = new GameState(currGameStates.get(0).getCurrMap(), 0, 0);
+        currGameStates.clear();
+        currGameStates.add(currGame);
     }
-    
+
     public void prevState() {
-    	if (currGameStates.size() == 0 || currGameStates.size() == 1) {
-    		return;
-    	}
-    	currGame = currGameStates.get(currGameStates.size() - 2);
-    	currGameStates.remove(currGameStates.size() - 1);
+        if (currGameStates.size() == 0 || currGameStates.size() == 1) {
+            return;
+        }
+        currGame = currGameStates.get(currGameStates.size() - 2);
+        currGameStates.remove(currGameStates.size() - 1);
     }
-    
+
     public void newGame(){
-    	currGameStates = new ArrayList<>();
+        currGameStates = new ArrayList<>();
         currGameStates.add(new GameState(new Map(generateMap(gameSizex,gameSizey),gameSizex,gameSizey) , 0 , 0));
         currGame = currGameStates.get(0);
     }
-    
+
     public Boolean isFinished(){
-    	int[][] checker;
-    	checker = currGame.getCurrMap().getLocations();
-    	for(int i = 0; i < gameSizex; i++){
-    		for(int m = 0; m < gameSizey; m++){
-    			if(checker[m][i] == Map.BOX){
-    				return false;
-    			}
-    		}
-    	}
-    	return true;
+        int[][] checker;
+        checker = currGame.getCurrMap().getLocations();
+        for(int i = 0; i < gameSizex; i++){
+            for(int m = 0; m < gameSizey; m++){
+                if(checker[m][i] == Map.BOX){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
