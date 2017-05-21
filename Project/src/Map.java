@@ -17,6 +17,10 @@ Key for map
 6: wall
 7: goal tile
 8: goal tile with box on top
+9: player on goal facing up
+10: player on goal facing right
+11: player on goal facing down
+12: player on goal facing left
 */
 public class Map {
     public static final int EMPTY = 0;
@@ -28,7 +32,10 @@ public class Map {
     public static final int WALL = 6;
     public static final int GOAL = 7;
     public static final int GOAL_BOX = 8;
-    public static final int PLAYER_ON_GOAL = 9;
+    public static final int PLAYER_ON_GOAL_UP = 9;
+    public static final int PLAYER_ON_GOAL_RIGHT = 10;
+    public static final int PLAYER_ON_GOAL_DOWN = 11;
+    public static final int PLAYER_ON_GOAL_LEFT = 12;
 
 
     private int[][] locations;
@@ -66,7 +73,7 @@ public class Map {
         ArrayList<Integer> locationArray = new ArrayList<Integer>();
         for(int i = 0; i < mapSizey ; i++){
             for(int m = 0; m < mapSizex; m++){
-                if((locations[i][m] >= 1 && locations[i][m] <= 4) || locations[i][m] == 9){
+                if((locations[i][m] >= MOVE_UP && locations[i][m] <= MOVE_LEFT) || (locations[i][m] >= PLAYER_ON_GOAL_UP && locations[i][m] <= PLAYER_ON_GOAL_LEFT)){
                     locationArray.add(new Integer(i));
                     locationArray.add(new Integer(m));
                     return locationArray;
@@ -94,17 +101,17 @@ public class Map {
         returnArray.add(mapSizey);
         return returnArray;
     }
-    
+
     //Creates a deep copy of the matrix.
     private void initLocations(int[][] input) {
-    	if (input == null) {
+        if (input == null) {
             return;
         }
 
         for (int i = 0; i < mapSizey; i++) {
-        	for (int j = 0; j < mapSizex; j++) {
-        		locations[i][j] = input[i][j];
-        	}
+            for (int j = 0; j < mapSizex; j++) {
+                locations[i][j] = input[i][j];
+            }
         }
     }
 }
