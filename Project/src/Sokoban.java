@@ -314,7 +314,7 @@ public class Sokoban extends JFrame implements ActionListener,ItemListener{
 		music.setMusic(fileName);
 		if(music.isPlay()){
 			music.stopMusic();
+			music.loadSound();
 		}
-		music.loadSound();
 	}
 }
