@@ -292,7 +292,10 @@ public class Sokoban extends JFrame implements ActionListener,ItemListener{
                 kit.getImage("pic/0.png"),
                 kit.getImage("pic/4.gif"),
                 kit.getImage("pic/9.png"),
-                kit.getImage("pic/1.gif")
+                kit.getImage("pic/8.GIF"),
+                kit.getImage("pic/7.GIF"),
+                kit.getImage("pic/5.GIF"),
+                kit.getImage("pic/6.GIF"),
         };
         public int[][] getOriMap() {
             return oriMap;
