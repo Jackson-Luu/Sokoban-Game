@@ -58,32 +58,23 @@ public class GameEngine {
         return samplemap2;
     }*/
 
-    public static int[][] generateMap(int x, int y){
+    public static int[][] generateMap(int x, int y) {
         int[][] map = new int[x][y];
-        //int xChunks = x / 3;
-        //int yChunks = y / 3;
         int boxes = genRandom(x/8, x/3); // upper bound is exclusive
+        final int b = boxes;
         int goals = boxes;
-        //int player = 1;
-        //int currChunk = 0;
-        //int lastChunk = xBlocks * yBlocks;
-        System.out.printf("Boxes: %d, Goals: %d \n", boxes, goals);
-        // Wall: 0
-        // Floor: 1
-        // Box : 2
-        // Goal: 3
-        // Player: 4
+        System.out.printf("Boxes: %d, Goals: %d, \n", boxes, goals);
         int nextTile;
 
-        // generate walls
-        for (int i = 0; i < x; i++ ) {
+        for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
-                nextTile = genRandom(0,11);
-                map[i][j] = (nextTile <= WALL_DENSITY) ? WALL : FLOOR;
+                map[i][j] = FLOOR;
             }
         }
 
         // generate boxes
+        int[][] boxLocation = new int[b][2];
+        int currBox = 0;
         for (int i = 1; i < x-1; i++) {
             for (int j = 1; j < y-1; j++) {
                 nextTile = genRandom(0,4);
@@ -96,18 +87,67 @@ public class GameEngine {
             }
         }
 
-        // generate goal spaces away from boxes...
-        for (int i = x-2; i > 1; i--) {
-            for (int j = y-2; j > 1; j--) {
-                nextTile = genRandom(0,4);
-                if (nextTile <= 2 && map[i][j] == FLOOR) {
-                    map[i][j] = FLOOR;
-                } else if (nextTile == 3 && map[i][j] == FLOOR && goals > 0) {
-                    map[i][j] = GOAL;
-                    goals--;
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if (map[i][j] == BOX) {
+                    boxLocation[currBox][1] = i;
+                    boxLocation[currBox][0] = j;
+                    currBox++;
                 }
             }
+        }
 
+        //'push'  boxes towards bottom of map to generate goals
+        int[][] individualPaths = new int[b][x*8];
+        for (int i = 0; i < b; i++) {
+            for (int j = 0; j < x*8; j++) {
+                individualPaths[i][j] = 0;
+            }
+        }
+
+        //keep track of box paths, create goals corresponding to boxes
+        ArrayList<Integer> boxPath = new ArrayList<Integer>();
+        for (int curr = 0; curr < b; curr++) {
+            int[] box = {boxLocation[curr][0], boxLocation[curr][1]};
+            //...
+            int amt = genRandom((int) (x*1.5), x*2);
+            ArrayList<Integer> path = push(map, box, amt);
+            //int currPath = 0;
+            System.out.printf("size=%s \n", path.size());
+            for (int i = 0; i < path.size(); i++) {
+
+                individualPaths[curr][i] = path.get(i);
+                boxPath.add(path.get(i));
+            }
+            System.out.printf("currX: %d, currY: %d\n", box[0], box[1]);
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    if (i == box[0] && j == box[1] && map[j][i] == FLOOR) {
+                        map[j][i] = GOAL;
+                        goals--;
+                    } else if (i == box[0] && j == box[1] && (map[j][i] == GOAL || map[j][i] == BOX)) {
+                        push(map, box, 7);
+                        map[box[0]][box[1]] = GOAL;
+                        goals--;
+                    }
+                }
+            }
+        }
+        // generate walls
+        for (int i = 0; i < x; i++ ) {
+            for (int j = 0; j < y; j++) {
+                nextTile = genRandom(0,11);
+
+                if (nextTile <= WALL_DENSITY && map[i][j] == FLOOR) {
+                    for(int q = 0; q < boxPath.size(); q += 2) {
+                        if (i != boxPath.get(q) && j != boxPath.get(q+1)) {
+                            map[i][j] = WALL;
+                        }
+                    }
+
+                }
+
+            }
         }
 
         // ensure no walls around starting area, boxes and goals
@@ -171,12 +211,27 @@ public class GameEngine {
                 if (map[i][j] == GOAL) finalgoal++;
                 if (map[i][j] == WALL) nWalls++;
                 if (map[i][j] == FLOOR) nFloors++;
-                System.out.printf("%d", map[i][j]);
+                System.out.printf("%d ", map[i][j]);
             }
             System.out.println();
 
         }
-        System.out.printf("EBoxes: %d, EGoals: %d Walls: %d Floors: %d\n", finalbox, finalgoal, nWalls, nFloors);
+        System.out.printf("EBoxes: %d, EGoals: %d\nWalls: %d Floors: %d\n", finalbox, finalgoal, nWalls, nFloors);
+
+        for (int i = 0; i < boxLocation.length; i++) {
+            for (int j = 0; j < 2; j++) {
+                System.out.println(boxLocation[i][j]);
+            }
+        }
+        //solution
+        for (int i = 0; i < b; i++) {
+            System.out.printf("Box: %d \n", i);
+            for (int j = 0; j < x*8; j += 2) {
+                if (individualPaths[i][j] != 0 && individualPaths[i][j+1] != 0)
+                    System.out.printf("Move: %d, x: %d, y: %d\n", j/2, individualPaths[i][j], individualPaths[i][j+1]);
+            }
+            System.out.println("\n");
+        }
         //
 
         return map;
@@ -186,6 +241,52 @@ public class GameEngine {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+
+    private static ArrayList<Integer> push(int[][] map, int[] box, int amt) {
+        System.out.printf("amt: %d\n", amt);
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        for (int p = 0; p < amt; p++) {
+            int dir = genRandom(0, 8);
+            if (dir == 0) {
+                if (box[0] > 0 && box[0] < map.length - 1) {
+                    if (map[box[0] - 1][box[1]] == FLOOR)
+                        //push up
+                        box[0]--;
+                    else p--;
+                }
+            } else if (dir >= 1 && dir <= 2) {
+                if (box[0] > 0 && box[0] < map.length - 1) {
+                    if (map[box[0] + 1][box[1]] == FLOOR)
+                        //push down
+                        box[0]++;
+                    else p--;
+                }
+            }
+            if (dir == 3) {
+                if (box[1] > 0 && box[1] < map.length - 1) {
+                    if (map[box[0]][box[1] - 1] == FLOOR)
+                        //push left
+                        box[1]--;
+                    else p--;
+                }
+            } else if (dir >= 4 && dir <= 7) {
+                if (box[1] > 0 && box[1] < map.length - 1) {
+                    if (map[box[0]][box[1] + 1] == FLOOR)
+                        //push right
+                        box[1]++;
+                    else p--;
+                }
+            }
+
+            for (int i = 0; i < box.length; i++) {
+                //System.out.printf("%d ", box[i]);
+                path.add(box[i]);
+            }
+            //System.out.printf("\n");
+        }
+        return path;
+    }
+
 
     private Boolean checkValid(int move){
         //if tile is empty
