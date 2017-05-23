@@ -17,7 +17,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-
 public class Sokoban extends JFrame implements ActionListener{
 
     private static final long serialVersionUID = 1L;
