@@ -26,7 +26,7 @@ public class Sokoban extends JFrame implements ActionListener{
     JMenuItem miReset,miExit,miBack;
     JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
     JMenuItem miHelp;
-    Boolean Completed;
+    Boolean Completed, menu;
     //music file
     String sMusic[] = {
             "casino.mid",
@@ -79,7 +79,7 @@ public class Sokoban extends JFrame implements ActionListener{
         cardLayout = new JPanel();
         cardLayout.setLayout(new CardLayout());
         menuPanel = new menuPanel(cardLayout);
-        mainPanel = new gamePanel(cardLayout, music);
+        mainPanel = new gamePanel(cardLayout);
         cardLayout.add(menuPanel, "Main Menu");
         
         c.add(cardLayout);
@@ -197,7 +197,7 @@ public class Sokoban extends JFrame implements ActionListener{
             int key = e.getKeyCode();
 
             if (key == KeyEvent.VK_LEFT) {
-                game.makeMove(Map.MOVE_LEFT);
+                game.makeMove(Map.MOVE_LEFT);               
             }
 
             if (key == KeyEvent.VK_RIGHT) {
@@ -212,11 +212,13 @@ public class Sokoban extends JFrame implements ActionListener{
                 game.makeMove(Map.MOVE_DOWN);
             }
             
-            mainPanel = new gamePanel(cardLayout, music);
-        	cardLayout.add(mainPanel);
-        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
-        	c.revalidate();
-            c.repaint();
+            if (menu == false) {
+            	mainPanel = new gamePanel(cardLayout);
+        		cardLayout.add(mainPanel);
+        		((CardLayout)cardLayout.getLayout()).next(cardLayout);
+        		c.revalidate();
+        		c.repaint();
+        	}
         }
     }
 
@@ -291,7 +293,8 @@ public class Sokoban extends JFrame implements ActionListener{
     			public void actionPerformed(ActionEvent e) {
     				game.newGame();
     				Completed = false;
-    				mainPanel = new gamePanel(cardLayout, music);
+    				menu = false;
+    				mainPanel = new gamePanel(cardLayout);
     	        	cardLayout.add(mainPanel);
     	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
     	        	c.revalidate();
@@ -301,6 +304,7 @@ public class Sokoban extends JFrame implements ActionListener{
     		btnLoad.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
     				Completed = false;
+    				menu = false;
     			}
     		});
     		btnExit.addActionListener(new ActionListener() {
@@ -332,7 +336,7 @@ public class Sokoban extends JFrame implements ActionListener{
     	private JComboBox<String> cbMusic;
     	private JPanel buttons;
     	
-    	public gamePanel(JPanel contentPane, Music music) {
+    	public gamePanel(JPanel contentPane) {
     		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
     		this.setBackground(Color.orange);
             add(new MyPanel(game.getState().getCurrMap().getLocations()));
@@ -351,7 +355,7 @@ public class Sokoban extends JFrame implements ActionListener{
     		btnReset.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
     				game.resetState();
-    				mainPanel = new gamePanel(cardLayout, music);
+    				mainPanel = new gamePanel(cardLayout);
     	        	cardLayout.add(mainPanel);
     	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
     	        	c.revalidate();
@@ -361,7 +365,7 @@ public class Sokoban extends JFrame implements ActionListener{
     		btnBack.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
     				game.prevState();
-    				mainPanel = new gamePanel(cardLayout, music);
+    				mainPanel = new gamePanel(cardLayout);
     	        	cardLayout.add(mainPanel);
     	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
     	        	c.revalidate();
@@ -384,6 +388,7 @@ public class Sokoban extends JFrame implements ActionListener{
     		});
     		btnMenu.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
+    				menu = true;
     				cardLayout.add(menuPanel);
     				((CardLayout)cardLayout.getLayout()).next(cardLayout);
     	        	c.revalidate();
