@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class Game2017 {
 	
 	public static void main(String[] args){
-		new MainMenu();
-		//new Sokoban(new GameEngine(15, 15));
+		new Sokoban(new GameEngine(15, 15));
 	}
 }	
