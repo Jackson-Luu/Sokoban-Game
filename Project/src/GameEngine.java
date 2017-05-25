@@ -30,33 +30,12 @@ public class GameEngine {
     private static final int WALL_DENSITY = 2;  // changes the amount of walls generated
     // lower number = less walls. Range 0..10
 
-    /*private int[][] generateMap(int x, int y){
-        int[][] map = new int[x][y];
-        int[][] samplemap = {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
-        int[][] samplemap2 = {
-                {0, 0, 0, 0, 1, 0, 0},
-                {0, 0, 0, 0, 8, 0, 0},
-        };
-        //generate a map here
-        return samplemap2;
-    }*/
-
+    /**
+     * Generate a new map
+     * @param x - x dimension
+     * @param y - y dimension
+     * @return generated map
+     */
     public int[][] generateMap(int x, int y) {
         int[][] map = new int[x][y];
         int boxes = genRandom(x/8, x/3); // upper bound is exclusive
@@ -72,21 +51,19 @@ public class GameEngine {
         }
 
         // generate boxes
+        // boxes are generated towards top of map
         int[][] boxLocation = new int[b][2];
         int currBox = 0;
         for (int i = 1; i < x-1; i++) {
             for (int j = 1; j < y-1; j++) {
-                //Keller: changed to 3
                 nextTile = genRandom(0,3);
-                if (nextTile <= 2 && map[i][j] == FLOOR) {
-                    map[i][j] = FLOOR;
-                } else if (nextTile == 3 && map[i][j] == FLOOR && boxes > 0) {
+                if (nextTile == 3 && map[i][j] == FLOOR && boxes > 0) {
                     map[i][j] = BOX;
                     boxes--;
                 }
             }
         }
-
+        //keep track of box locations
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (map[i][j] == BOX) {
@@ -109,13 +86,10 @@ public class GameEngine {
         ArrayList<Integer> boxPath = new ArrayList<Integer>();
         for (int curr = 0; curr < b; curr++) {
             int[] box = {boxLocation[curr][0], boxLocation[curr][1]};
-            //...
             int amt = genRandom((int) (x*1.5), x*2);
             ArrayList<Integer> path = push(map, box, amt);
-            //int currPath = 0;
             System.out.printf("size=%s \n", path.size());
             for (int i = 0; i < path.size(); i++) {
-
                 individualPaths[curr][i] = path.get(i);
                 boxPath.add(path.get(i));
             }
@@ -189,7 +163,7 @@ public class GameEngine {
                         if (map[i][j] == WALL) {
                             nextTile = genRandom(0,10);
                             if (nextTile > 0) {
-                                map[i][j] = FLOOR; //80% chance to change a wall to floor
+                                map[i][j] = FLOOR;
                             }
                         }
                     }
@@ -216,7 +190,7 @@ public class GameEngine {
                 }
             }
         }
-
+        //fill in inaccessible floor tiles
         map = removeBubbles(map);
 
         // generate player
@@ -255,6 +229,7 @@ public class GameEngine {
                 System.out.println(boxLocation[i][j]);
             }
         }
+        //
         //solution
         for (int i = 0; i < b; i++) {
             System.out.printf("Box: %d \n", i);
@@ -339,6 +314,11 @@ public class GameEngine {
         }
     }*/
 
+    /**
+     * Fill in inaccessible floor tiles with walls
+     * @param map - current map
+     * @return - map with inaccessible floor tiles filled in
+     */
     public int[][] removeBubbles(int[][] map){
         /*
             Let 1 = next to wall
@@ -422,16 +402,31 @@ public class GameEngine {
         return FLOOR;
     }
 
+    /**
+     * Generate a random number
+     * @param min - lower bound
+     * @param max - upper bound
+     * @return - number
+     */
     private static int genRandom(int min, int max) {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     * Move boxes from starting positions to goal positions,
+     * keeping track of the path.
+     * @param map - current map
+     * @param box - location of current box
+     * @param amt - number of pushes to be made
+     * @return - co-ordinates current box was pushed to
+     */
     private static ArrayList<Integer> push(int[][] map, int[] box, int amt) {
         System.out.printf("amt: %d\n", amt);
         ArrayList<Integer> path = new ArrayList<Integer>();
         for (int p = 0; p < amt; p++) {
             int dir = genRandom(0, 8);
+            //bias towards moving goals down and right, away from starting pos
             if (dir == 0) {
                 if (box[0] > 0 && box[0] < map.length - 1) {
                     if (map[box[0] - 1][box[1]] == FLOOR)
