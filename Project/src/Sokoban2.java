@@ -39,7 +39,7 @@ public class Sokoban extends JFrame implements ActionListener{
             "Casino",
             "Forest",
             "Jumper",
-            "party",
+            "Party",
             "Go ahead"
 
     };
@@ -82,8 +82,8 @@ public class Sokoban extends JFrame implements ActionListener{
         mainPanel = new gamePanel(cardLayout);
         cardLayout.add(menuPanel, "Main Menu");
         
-        c.add(cardLayout);
-        this.setContentPane(c);
+        c.add(cardLayout);       
+	    this.setContentPane(c);
         this.setPreferredSize(new Dimension(720, 720));
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,11 +111,11 @@ public class Sokoban extends JFrame implements ActionListener{
         mnuOption.add(miExit);
 
         mnuSet = new JMenu("Setting");
-        miMusic1 = new JMenuItem("default");
-        miMusic2 = new JMenuItem("good");
-        miMusic3 = new JMenuItem("music");
-        miMusic4 = new JMenuItem("choose");
-        miMusic5 = new JMenuItem("column");
+        miMusic1 = new JMenuItem("Casino");
+        miMusic2 = new JMenuItem("Forset");
+        miMusic3 = new JMenuItem("Jumper");
+        miMusic4 = new JMenuItem("Party");
+        miMusic5 = new JMenuItem("Go ahead");
         mnuSet.add(miMusic1);
         mnuSet.add(miMusic2);
         mnuSet.add(miMusic3);
@@ -241,7 +241,10 @@ public class Sokoban extends JFrame implements ActionListener{
                 kit.getImage("pic/0.png"),
                 kit.getImage("pic/4.gif"),
                 kit.getImage("pic/9.png"),
-                kit.getImage("pic/1.gif")
+                kit.getImage("pic/8.GIF"),
+		kit.getImage("pic/7.GIF"),
+		kit.getImage("pic/5.GIF"),
+		kit.getImage("pic/6.GIF")
         };
         public int[][] getOriMap() {
             return oriMap;
