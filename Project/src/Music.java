@@ -9,9 +9,9 @@ public class Music {
 	String path = new String("music/");
 	String file = new String("casino.mid");
 	
-	Sequence seq;
-	Sequencer midi;
-	boolean sign;
+	private Sequence seq;
+	private Sequencer midi;
+	private boolean sign;
 	
 	public Music(){
 		loadSound();
