@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+
 public class Sokoban extends JFrame implements ActionListener{
 
     private static final long serialVersionUID = 1L;
@@ -216,7 +217,6 @@ public class Sokoban extends JFrame implements ActionListener{
         		cardLayout.add(mainPanel);
         		((CardLayout)cardLayout.getLayout()).next(cardLayout);
         		c.revalidate();
-        		c.repaint();
         	}
         }
     }
@@ -251,8 +251,8 @@ public class Sokoban extends JFrame implements ActionListener{
         }
         public MyPanel(int[][] map){
             readMap(map);
-            this.requestFocus();
-            repaint();
+            //this.requestFocus();
+            //repaint();
         }
         public void readMap(int[][] map){
             this.oriMap = map;
@@ -277,7 +277,7 @@ public class Sokoban extends JFrame implements ActionListener{
     
     class menuPanel extends JPanel {
     	
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 6508884619039209211L;
 		private JButton btnNew, btnLoad, btnExit;	
     	
     	public menuPanel(JPanel contentPane) {
@@ -297,7 +297,6 @@ public class Sokoban extends JFrame implements ActionListener{
     	        	cardLayout.add(mainPanel);
     	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
     	        	c.revalidate();
-    	            c.repaint();
     			}
     		});
     		btnLoad.addActionListener(new ActionListener() {
@@ -330,7 +329,7 @@ public class Sokoban extends JFrame implements ActionListener{
     
     class gamePanel extends JPanel implements ItemListener{
     	
-		private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = -3734882620271204708L;
 		private JButton btnReset, btnBack, btnMusic, btnMenu;
     	private JComboBox<String> cbMusic;
     	private JPanel buttons;
