@@ -25,8 +25,8 @@ public class Sokoban extends JFrame implements ActionListener{
 
     private static final long serialVersionUID = 1L;
     JMenuBar menuBar;
-    JMenu mnuOption,mnuSet,mnuHelp;
-    JMenuItem miReset,miExit,miBack;
+    JMenu mnuStyles,mnuSet,mnuHelp;
+    JMenuItem miStyle1, miStyle2, miStyle3, miExit;
     JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
     JMenuItem miHelp;
     Boolean Completed = false, menu = true;
