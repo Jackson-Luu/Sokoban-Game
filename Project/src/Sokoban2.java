@@ -78,9 +78,8 @@ public class Sokoban extends JFrame implements ActionListener{
         c.setLayout(new BorderLayout());
         c.setBackground(Color.orange);
 
-        lblTitle = new JLabel("SOKOBAN GAME",JLabel.CENTER);
-        lblTitle.setFont(new Font("",Font.BOLD,20));
-        lblTitle.setPreferredSize(new Dimension(720, 100));
+        lblTitle = new JLabel(new ImageIcon("pic/game_logo.png"));
+        lblTitle.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
         c.add(lblTitle, BorderLayout.PAGE_START);
         setMenus();
         Completed = false;
