@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -5,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -16,6 +19,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 
 public class Sokoban extends JFrame implements ActionListener{
@@ -60,15 +64,13 @@ public class Sokoban extends JFrame implements ActionListener{
         //set icon
         this.setIconImage(image);
         c = this.getContentPane();
-        c.setLayout(new FlowLayout());
+        c.setLayout(new BorderLayout());
         c.setBackground(Color.orange);
-        FlowLayout f = (FlowLayout)c.getLayout();
-        f.setHgap(1000);
 
         lblTitle = new JLabel("SOKOBAN GAME",JLabel.CENTER);
         lblTitle.setFont(new Font("",Font.BOLD,20));
         lblTitle.setPreferredSize(new Dimension(720, 100));
-        c.add(lblTitle);
+        c.add(lblTitle, BorderLayout.PAGE_START);
         //put buttons
         setMenus();
         Completed = false;
@@ -82,9 +84,8 @@ public class Sokoban extends JFrame implements ActionListener{
         mainPanel = new gamePanel(cardLayout);
         cardLayout.add(menuPanel, "Main Menu");
         
-        c.add(cardLayout);       
-	    this.setContentPane(c);
-        this.setPreferredSize(new Dimension(720, 720));
+        c.add(cardLayout);
+        this.setContentPane(c);
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationByPlatform(true);
@@ -112,10 +113,10 @@ public class Sokoban extends JFrame implements ActionListener{
 
         mnuSet = new JMenu("Setting");
         miMusic1 = new JMenuItem("Casino");
-        miMusic2 = new JMenuItem("Forset");
+        miMusic2 = new JMenuItem("Forest");
         miMusic3 = new JMenuItem("Jumper");
         miMusic4 = new JMenuItem("Party");
-        miMusic5 = new JMenuItem("Go ahead");
+        miMusic5 = new JMenuItem("Go Ahead");
         mnuSet.add(miMusic1);
         mnuSet.add(miMusic2);
         mnuSet.add(miMusic3);
@@ -242,9 +243,9 @@ public class Sokoban extends JFrame implements ActionListener{
                 kit.getImage("pic/4.gif"),
                 kit.getImage("pic/9.png"),
                 kit.getImage("pic/8.GIF"),
-		kit.getImage("pic/7.GIF"),
-		kit.getImage("pic/5.GIF"),
-		kit.getImage("pic/6.GIF")
+                kit.getImage("pic/7.GIF"),
+                kit.getImage("pic/5.GIF"),
+                kit.getImage("pic/6.GIF")
         };
         public int[][] getOriMap() {
             return oriMap;
@@ -264,7 +265,7 @@ public class Sokoban extends JFrame implements ActionListener{
 
 
         @Override
-        public void paint(Graphics g){
+        public void paintComponent(Graphics g){
             for(int i = 0; i < 15; i++){
                 for(int j = 0; j< 15;j++){
                     g.drawImage(mapimg[this.tempMap[j][i]], i*30, j*30, 30,30,this);
@@ -338,8 +339,14 @@ public class Sokoban extends JFrame implements ActionListener{
     	private JPanel buttons;
     	
     	public gamePanel(JPanel contentPane) {
-    		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    		this.setLayout(new GridBagLayout());
     		this.setBackground(Color.orange);
+    		
+    		GridBagConstraints gbc = new GridBagConstraints();
+    		gbc.gridx = 0;
+    		gbc.gridy = 0;
+    		gbc.fill = GridBagConstraints.BOTH;
+    		gbc.anchor = GridBagConstraints.NORTH;
             add(new MyPanel(game.getState().getCurrMap().getLocations()));
             buttons = new JPanel();
             buttons.setLayout(new GridLayout(6, 1, 0, 20));
@@ -411,7 +418,10 @@ public class Sokoban extends JFrame implements ActionListener{
             buttons.add(cbMusic);
             buttons.add(btnMenu);
             
+            gbc.gridx++;
+            gbc.fill = GridBagConstraints.BOTH;
             add(buttons);
+            this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     	}
     	
     	@Override
