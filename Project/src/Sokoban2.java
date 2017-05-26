@@ -247,7 +247,7 @@ public class Sokoban extends JFrame implements ActionListener{
     /**
      *
      */
-    class MyPanel extends JPanel{
+    private class MyPanel fextends JPanel{
 
         private static final long serialVersionUID = 1L;
         private int[][] oriMap;
