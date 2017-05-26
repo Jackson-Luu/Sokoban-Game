@@ -124,7 +124,7 @@ public class Sokoban extends JFrame implements ActionListener{
         mnuOption.addSeparator();
         mnuOption.add(miExit);
 
-        mnuSet = new JMenu("Setting");
+        mnuSet = new JMenu("Music");
         miMusic1 = new JMenuItem("Casino");
         miMusic2 = new JMenuItem("Forest");
         miMusic3 = new JMenuItem("Jumper");
