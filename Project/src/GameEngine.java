@@ -593,7 +593,15 @@ public class GameEngine {
 
         return reachable;
     }
-    //makes a point reachable from the start destination
+
+
+    /**
+     * Makes a point reachable from the start destination
+     * @param map - current map
+     * @param xLoc - x coordinate of tile
+     * @param yLoc - y coordinate of tile
+     * @return updated map - with areas reachable
+     */
     private int[][] makeReachable(int[][] map, int xLoc, int yLoc){
         //check if tile itself is wall and turn into floor
         if(map[yLoc][xLoc] == WALL){
@@ -759,6 +767,14 @@ public class GameEngine {
         return path;
     }
 
+    /**
+     * Check if a box has already been pushed to a potential location
+     * This improves the randomess of box locations
+     * @param path - list of past locations
+     * @param y - current y-coord to check
+     * @param x - current x-coord to check
+     * @return true if tile is in path, else false
+     */
     private static Boolean inPath(ArrayList<Integer> path, int y, int x){
         for(int i =0; i < path.size(); i+=2){
             if(path.get(i) == y && path.get(i+1) == x){
@@ -768,6 +784,11 @@ public class GameEngine {
         return false;
     }
 
+    /**
+     * Check if a particular player move is valid.
+     * @param move - requested move (up, down, left or right)
+     * @return true if move is valid, else false
+     */
     private Boolean checkValid(int move){
         //if tile is empty
         //checks if tile is empty or occupied
@@ -848,6 +869,11 @@ public class GameEngine {
         return false;
     }
 
+    /**
+     * Make the player's requested move
+     * This updates the location of the character on the map
+     * @param move - requested move (up, down, left or right)
+     */
     public void makeMove(int move){
         Map functionMap = new Map(currGame.getCurrMap().getLocations(),gameSizex,gameSizey);
         ArrayList<Integer> playerLoc = functionMap.checkPlayerLocation();
@@ -897,6 +923,13 @@ public class GameEngine {
         currGameStates.add(updated);
     }
 
+    /**
+     * Modifies x-coordinate or y-cooridnate to check the appropriate adjacent cell
+     * @param xLoc - current x-coord
+     * @param yLoc - current y-coord
+     * @param move - direction of move
+     * @return - cell to check
+     */
     private ArrayList<Integer> augment(int xLoc, int yLoc, int move){
         if(move == 1){
             yLoc--;
@@ -913,16 +946,26 @@ public class GameEngine {
         return ret;
     }
 
+    /**
+     * Get current game state.
+     * @return game state
+     */
     public GameState getState() {
         return this.currGame;
     }
 
+    /**
+     * Reset the game (returns the player and all boxes to their original positions)
+     */
     public void resetState() {
         currGame = new GameState(currGameStates.get(0).getCurrMap(), 0, 0);
         currGameStates.clear();
         currGameStates.add(currGame);
     }
 
+    /**
+     * Undoes the previous move
+     */
     public void prevState() {
         if (currGameStates.size() == 0 || currGameStates.size() == 1) {
             return;
@@ -931,12 +974,19 @@ public class GameEngine {
         currGameStates.remove(currGameStates.size() - 1);
     }
 
+    /**
+     * Start a new game
+     */
     public void newGame(){
         currGameStates = new ArrayList<>();
         currGameStates.add(new GameState(new Map(generateMap(gameSizex,gameSizey),gameSizex,gameSizey) , 0 , 0));
         currGame = currGameStates.get(0);
     }
 
+    /**
+     * Check whether a game has been completed
+     * @return true if game is completed, else false
+     */
     public Boolean isFinished(){
         int[][] checker;
         checker = currGame.getCurrMap().getLocations();
@@ -950,6 +1000,10 @@ public class GameEngine {
         return true;
     }
 
+    /**
+     * Set the current game state
+     * @param setState - current state
+     */
     public void setState(GameState setState){
         currGame = setState;
     }
