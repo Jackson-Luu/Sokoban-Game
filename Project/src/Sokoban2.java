@@ -3,7 +3,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -19,7 +18,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 
 public class Sokoban extends JFrame implements ActionListener{
@@ -218,6 +216,7 @@ public class Sokoban extends JFrame implements ActionListener{
         		cardLayout.add(mainPanel);
         		((CardLayout)cardLayout.getLayout()).next(cardLayout);
         		c.revalidate();
+        		c.repaint();
         	}
         }
     }
@@ -255,8 +254,9 @@ public class Sokoban extends JFrame implements ActionListener{
         }
         public MyPanel(int[][] map){
             readMap(map);
-            //this.requestFocus();
-            //repaint();
+            this.setOpaque(true);
+            this.requestFocus();
+            repaint();
         }
         public void readMap(int[][] map){
             this.oriMap = map;
@@ -266,6 +266,9 @@ public class Sokoban extends JFrame implements ActionListener{
 
         @Override
         public void paintComponent(Graphics g){
+        	g.setColor(Color.ORANGE);
+        	g.fillRect(0, 0, getWidth(), getHeight());
+        	g.setColor(getForeground());
             for(int i = 0; i < 15; i++){
                 for(int j = 0; j< 15;j++){
                     g.drawImage(mapimg[this.tempMap[j][i]], i*30, j*30, 30,30,this);
@@ -301,6 +304,7 @@ public class Sokoban extends JFrame implements ActionListener{
     	        	cardLayout.add(mainPanel);
     	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
     	        	c.revalidate();
+    	        	c.repaint();
     			}
     		});
     		btnLoad.addActionListener(new ActionListener() {
@@ -421,7 +425,6 @@ public class Sokoban extends JFrame implements ActionListener{
             gbc.gridx++;
             gbc.fill = GridBagConstraints.BOTH;
             add(buttons);
-            this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     	}
     	
     	@Override
