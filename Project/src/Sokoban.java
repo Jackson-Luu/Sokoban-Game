@@ -30,6 +30,12 @@ public class Sokoban extends JFrame implements ActionListener{
     JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
     JMenuItem miHelp;
     Boolean Completed = false, menu = true;
+    String styles[] = {
+    		"style1",
+    		"style2",
+    		"style3"
+    };
+    String currStyle = styles[0];
     //music file
     String sMusic[] = {
             "casino.mid",
@@ -114,15 +120,17 @@ public class Sokoban extends JFrame implements ActionListener{
      * Creates the menu-bar for the GUI window.
      */
     public void setMenus(){
-        mnuOption = new JMenu("Option");
-        miReset = new JMenuItem("Reset");
+        mnuStyles = new JMenu("Styles");
         miExit = new JMenuItem("Exit");
-        miBack = new JMenuItem("Back");
+        miStyle1 = new JMenuItem("Style 1");
+        miStyle2 = new JMenuItem("Style 2");
+        miStyle3 = new JMenuItem("Style 3");
 
-        mnuOption.add(miBack);
-        mnuOption.add(miReset);
-        mnuOption.addSeparator();
-        mnuOption.add(miExit);
+        mnuStyles.add(miStyle1);
+        mnuStyles.add(miStyle2);
+        mnuStyles.add(miStyle3);
+        mnuStyles.addSeparator();
+        mnuStyles.add(miExit);
 
         mnuSet = new JMenu("Music");
         miMusic1 = new JMenuItem("Casino");
@@ -152,7 +160,7 @@ public class Sokoban extends JFrame implements ActionListener{
         miHelp.addActionListener(this);
 
         menuBar = new JMenuBar();
-        menuBar.add(mnuOption);
+        menuBar.add(mnuStyles);
         menuBar.add(mnuSet);
         menuBar.add(mnuHelp);
         this.setJMenuBar(menuBar);
@@ -192,6 +200,21 @@ public class Sokoban extends JFrame implements ActionListener{
             JOptionPane.showMessageDialog(this, str, "Help", JOptionPane.INFORMATION_MESSAGE);
         } else if(e.getSource().equals(miExit)){
             System.exit(0);
+        } else if (e.getSource().equals(miStyle1)) {
+        	currStyle = styles[0];
+        	mainPanel = new gamePanel(cardLayout);
+        	cardLayout.add(mainPanel);
+        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
+        } else if (e.getSource().equals(miStyle2)) {
+        	currStyle = styles[1];
+        	mainPanel = new gamePanel(cardLayout);
+        	cardLayout.add(mainPanel);
+        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
+        } else if (e.getSource().equals(miStyle3)) {
+        	currStyle = styles[2];
+        	mainPanel = new gamePanel(cardLayout);
+        	cardLayout.add(mainPanel);
+        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
         } else if(e.getSource().equals(miMusic1)){
             music.setMusic(sMusic[0]);
             if(music.isPlay()){
@@ -272,19 +295,19 @@ public class Sokoban extends JFrame implements ActionListener{
 
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image mapimg[] = {
-                kit.getImage("pic/2.2.jpg"),
-                kit.getImage("pic/8.3.png"),
-                kit.getImage("pic/7.3.png"),
-                kit.getImage("pic/5.3.png"),
-                kit.getImage("pic/6.3.png"),
-                kit.getImage("pic/3.3.png"),
-                kit.getImage("pic/0.3.png"),
-                kit.getImage("pic/4.3.png"),
-                kit.getImage("pic/9.3.png"),
-                kit.getImage("pic/8.4.png"),
-                kit.getImage("pic/7.4.png"),
-                kit.getImage("pic/5.4.png"),
-                kit.getImage("pic/6.4.png")
+                kit.getImage("pic/" + currStyle + "/0.jpg"),
+                kit.getImage("pic/" + currStyle + "/1.png"),
+                kit.getImage("pic/" + currStyle + "/2.png"),
+                kit.getImage("pic/" + currStyle + "/3.png"),
+                kit.getImage("pic/" + currStyle + "/4.png"),
+                kit.getImage("pic/" + currStyle + "/5.png"),
+                kit.getImage("pic/" + currStyle + "/6.png"),
+                kit.getImage("pic/" + currStyle + "/7.png"),
+                kit.getImage("pic/" + currStyle + "/8.png"),
+                kit.getImage("pic/" + currStyle + "/9.png"),
+                kit.getImage("pic/" + currStyle + "/10.png"),
+                kit.getImage("pic/" + currStyle + "/11.png"),
+                kit.getImage("pic/" + currStyle + "/12.png")
         };
         public int[][] getOriMap() {
             return oriMap;
