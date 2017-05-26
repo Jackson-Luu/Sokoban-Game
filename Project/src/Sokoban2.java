@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 
 public class Sokoban extends JFrame implements ActionListener{
@@ -80,7 +82,6 @@ public class Sokoban extends JFrame implements ActionListener{
         lblTitle.setFont(new Font("",Font.BOLD,20));
         lblTitle.setPreferredSize(new Dimension(720, 100));
         c.add(lblTitle, BorderLayout.PAGE_START);
-        //put buttons
         setMenus();
         Completed = false;
 
@@ -278,6 +279,7 @@ public class Sokoban extends JFrame implements ActionListener{
         public MyPanel(int[][] map){
             readMap(map);
             this.setOpaque(true);
+            this.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
             this.requestFocus();
             repaint();
         }
@@ -301,7 +303,7 @@ public class Sokoban extends JFrame implements ActionListener{
         
         @Override
     	public Dimension getPreferredSize() {
-    		return (new Dimension(500, 500));
+    		return (new Dimension(452, 452));
     	}
     }
     
@@ -372,6 +374,8 @@ public class Sokoban extends JFrame implements ActionListener{
     		add(btnNew);
     		add(btnLoad);
     		add(btnExit);
+    		
+    		this.setBorder(BorderFactory.createEmptyBorder(50, 100, 0, 100));
     	}
     	
     	@Override
@@ -393,13 +397,15 @@ public class Sokoban extends JFrame implements ActionListener{
     	public gamePanel(JPanel contentPane) {
     		this.setLayout(new GridBagLayout());
     		this.setBackground(Color.orange);
+    		GridBagLayout g = (GridBagLayout)this.getLayout();
     		
     		GridBagConstraints gbc = new GridBagConstraints();
     		gbc.gridx = 0;
     		gbc.gridy = 0;
-    		gbc.fill = GridBagConstraints.BOTH;
     		gbc.anchor = GridBagConstraints.NORTH;
-            add(new MyPanel(game.getState().getCurrMap().getLocations()));
+    		MyPanel mP= new MyPanel(game.getState().getCurrMap().getLocations());
+    		g.setConstraints(mP, gbc);
+    		add(mP);
             buttons = new JPanel();
             buttons.setLayout(new GridLayout(8, 1, 0, 10));
             buttons.setBackground(Color.orange);
@@ -477,7 +483,9 @@ public class Sokoban extends JFrame implements ActionListener{
             buttons.add(btnMenu);
             
             gbc.gridx++;
-            gbc.fill = GridBagConstraints.BOTH;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.insets = new Insets(0, 50, 0, 0);
+            g.setConstraints(buttons, gbc);
             add(buttons);
     	}
     	
