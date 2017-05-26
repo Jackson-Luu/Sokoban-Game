@@ -88,7 +88,7 @@ public class GameEngine {
         for (int curr = 0; curr < b; curr++) {
             int[] box = {boxLocation[curr][0], boxLocation[curr][1]};
             int amt = genRandom((int) (x*1.5), x*2);
-            ArrayList<Integer> path = push(map, box, amt);
+            ArrayList<Integer> path = push(map, box, amt,curr);
             System.out.printf("size=%s \n", path.size());
             indPathSize[curr] = path.size();
             for (int i = 0; i < path.size(); i++) {
@@ -102,7 +102,7 @@ public class GameEngine {
                         map[i][j] = GOAL;
                         goals--;
                     } else if (i == box[0] && j == box[1] && (map[i][j] == GOAL || map[i][j] == BOX)) {
-                        push(map, box, 7);
+                        push(map, box, 7,0);
                         map[box[0]][box[1]] = GOAL;
                         goals--;
                     }
@@ -649,7 +649,7 @@ public class GameEngine {
      * @param amt - number of pushes to be made
      * @return - co-ordinates current box was pushed to
      */
-    private static ArrayList<Integer> push(int[][] map, int[] box, int amt) {
+    private static ArrayList<Integer> push(int[][] map, int[] box, int amt, int mod) {
         System.out.printf("amt: %d\n", amt);
         ArrayList<Integer> path = new ArrayList<Integer>();
         for (int p = 0; p < amt; p++) {
@@ -663,7 +663,7 @@ public class GameEngine {
                         else p--;
                     }
                 }
-            } else if (dir >= 1 && dir <= 3) {
+            } else if (dir >= 2 && dir <= 5-mod%3) {
                 if (box[0] > 0 && box[0] < map.length - 1) {
                     if(!inPath(path,box[0]+1,box[1])){
                         if (map[box[0] + 1][box[1]] == FLOOR)
@@ -672,7 +672,7 @@ public class GameEngine {
                         else p--;
                     }
                 }
-            } else if (dir == 4) {
+            } else if (dir == 1) {
                 if (box[1] > 0 && box[1] < map.length - 1) {
                     if(!inPath(path,box[0],box[1]-1)){
                         if (map[box[0]][box[1] - 1] == FLOOR)
@@ -681,7 +681,7 @@ public class GameEngine {
                         else p--;
                     }
                 }
-            } else if (dir >= 5 && dir <= 7) {
+            } else if (dir >= 6-mod%3 && dir <= 7) {
                 if (box[1] > 0 && box[1] < map.length - 1) {
                     if(!inPath(path,box[0],box[1]+1)){
                         if (map[box[0]][box[1] + 1] == FLOOR)
