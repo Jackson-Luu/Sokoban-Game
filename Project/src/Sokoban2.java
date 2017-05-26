@@ -60,6 +60,11 @@ public class Sokoban extends JFrame implements ActionListener{
     menuPanel menuPanel;
     JLabel lblTitle;
     JPanel cardLayout;
+    
+    /**
+     * Constructor for the GUI frame.
+     * @param currGame
+     */
     public Sokoban(GameEngine currGame){
         super("Game 2017");
 
@@ -104,7 +109,10 @@ public class Sokoban extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
-    //set menu
+
+    /**
+     * Creates the menu-bar for the GUI window.
+     */
     public void setMenus(){
         mnuOption = new JMenu("Option");
         miReset = new JMenuItem("Reset");
@@ -150,12 +158,15 @@ public class Sokoban extends JFrame implements ActionListener{
         this.setJMenuBar(menuBar);
     }
 
+    /**
+     * Detects actions made by the user.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(game.isFinished() && !Completed){
             Completed = true;
             String finished = "You Win!";
-            JOptionPane.showMessageDialog(this, finished, "Help", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, finished, "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
         }
         if(e.getSource().equals(miHelp)){
             String str = "COMP2911\n";
@@ -196,6 +207,9 @@ public class Sokoban extends JFrame implements ActionListener{
         }
     }
 
+    /**
+     * Detects keyboard input from the user, specifically the arrow keys.
+     */
     private class TAdapter extends KeyAdapter {
 
         @Override
@@ -228,11 +242,13 @@ public class Sokoban extends JFrame implements ActionListener{
         }
     }
 
-    //game panel
+
+
+    /**
+     *
+     */
     class MyPanel extends JPanel{
-        /**
-         *
-         */
+
         private static final long serialVersionUID = 1L;
         private int[][] oriMap;
         private int[][] tempMap;
@@ -289,9 +305,12 @@ public class Sokoban extends JFrame implements ActionListener{
     	}
     }
     
+    /**
+     * JPanel for the main menu.
+     */
     class menuPanel extends JPanel {
     	
-		private static final long serialVersionUID = 6508884619039209211L;
+		private static final long serialVersionUID = 1L;
 		private JButton btnNew, btnLoad, btnExit;
 		Object[] options = {
 				"Load Slot 1",
@@ -361,9 +380,12 @@ public class Sokoban extends JFrame implements ActionListener{
     	}
     }
     
+    /**
+     * JPanel for the gameplay screen.
+     */
     class gamePanel extends JPanel implements ItemListener{
     	
-		private static final long serialVersionUID = -3734882620271204708L;
+		private static final long serialVersionUID = 1L;
 		private JButton btnReset, btnBack, btnMusic, btnMenu;
     	private JComboBox<String> cbMusic, cbSave;
     	private JPanel buttons;
@@ -379,7 +401,7 @@ public class Sokoban extends JFrame implements ActionListener{
     		gbc.anchor = GridBagConstraints.NORTH;
             add(new MyPanel(game.getState().getCurrMap().getLocations()));
             buttons = new JPanel();
-            buttons.setLayout(new GridLayout(7, 1, 0, 20));
+            buttons.setLayout(new GridLayout(8, 1, 0, 10));
             buttons.setBackground(Color.orange);
     		
             btnReset = new JButton("Reset");
@@ -388,6 +410,7 @@ public class Sokoban extends JFrame implements ActionListener{
             JLabel lblMusic = new JLabel("Select Music:");
             cbMusic = new JComboBox<String>(musicName);
             cbMusic.addItemListener(this);
+            JLabel lblSave = new JLabel("Save Game:");
             cbSave = new JComboBox<String>(saveName);
             cbSave.addItemListener(this);
             btnMenu = new JButton("Main Menu");            
@@ -449,6 +472,7 @@ public class Sokoban extends JFrame implements ActionListener{
             buttons.add(btnMusic);
             buttons.add(lblMusic);
             buttons.add(cbMusic);
+            buttons.add(lblSave);
             buttons.add(cbSave);
             buttons.add(btnMenu);
             
