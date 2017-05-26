@@ -30,7 +30,7 @@ public class Sokoban extends JFrame implements ActionListener{
     JMenuItem miReset,miExit,miBack;
     JMenuItem miMusic1,miMusic2,miMusic3,miMusic4,miMusic5;
     JMenuItem miHelp;
-    Boolean Completed, menu;
+    Boolean Completed = false, menu = true;
     //music file
     String sMusic[] = {
             "casino.mid",
