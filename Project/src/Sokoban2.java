@@ -3,7 +3,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -94,6 +93,7 @@ public class Sokoban extends JFrame implements ActionListener{
         cardLayout.add(menuPanel, "Main Menu");
         
         c.add(cardLayout);
+        
         this.setContentPane(c);
         this.pack();
         this.setResizable(false);
@@ -246,7 +246,7 @@ public class Sokoban extends JFrame implements ActionListener{
     /**
      *
      */
-    private class MyPanel extends JPanel{
+     class MyPanel extends JPanel{
 
         private static final long serialVersionUID = 1L;
         private int[][] oriMap;
@@ -255,14 +255,14 @@ public class Sokoban extends JFrame implements ActionListener{
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image mapimg[] = {
                 kit.getImage("pic/2.2.jpg"),
-		kit.getImage("pic/8.3.png"),
-		kit.getImage("pic/7.3.png"),
-		kit.getImage("pic/5.3.png"),
-		kit.getImage("pic/6.3.png"),
-		kit.getImage("pic/3.3.png"),
-		kit.getImage("pic/0.3.png"),
-		kit.getImage("pic/4.3.png"),
-		kit.getImage("pic/9.3.png"),
+                kit.getImage("pic/8.3.png"),
+                kit.getImage("pic/7.3.png"),
+                kit.getImage("pic/5.3.png"),
+                kit.getImage("pic/6.3.png"),
+                kit.getImage("pic/3.3.png"),
+                kit.getImage("pic/0.3.png"),
+                kit.getImage("pic/4.3.png"),
+                kit.getImage("pic/9.3.png"),
                 kit.getImage("pic/8.4.png"),
                 kit.getImage("pic/7.4.png"),
                 kit.getImage("pic/5.4.png"),
@@ -319,6 +319,7 @@ public class Sokoban extends JFrame implements ActionListener{
         };
     	
     	public menuPanel(JPanel contentPane) {
+    		
     		this.setLayout(new GridLayout(4, 1, 0, 50));
     		this.setBackground(Color.orange);
     		
@@ -388,7 +389,7 @@ public class Sokoban extends JFrame implements ActionListener{
     class gamePanel extends JPanel implements ItemListener{
     	
 		private static final long serialVersionUID = 1L;
-		private JButton btnReset, btnBack, btnMusic, btnMenu;
+		private JButton btnNewGame,btnReset, btnBack, btnMusic, btnMenu;
     	private JComboBox<String> cbMusic, cbSave;
     	private JPanel buttons;
     	
@@ -405,9 +406,10 @@ public class Sokoban extends JFrame implements ActionListener{
     		g.setConstraints(mP, gbc);
     		add(mP);
             buttons = new JPanel();
-            buttons.setLayout(new GridLayout(8, 1, 0, 10));
+            buttons.setLayout(new GridLayout(9, 1, 0, 10));
             buttons.setBackground(Color.orange);
     		
+            btnNewGame = new JButton("New Game");
             btnReset = new JButton("Reset");
             btnBack = new JButton("Back");
             btnMusic = new JButton("Music Off");
@@ -419,6 +421,16 @@ public class Sokoban extends JFrame implements ActionListener{
             cbSave.addItemListener(this);
             btnMenu = new JButton("Main Menu");            
     		
+            btnNewGame.addActionListener(new ActionListener(){
+            	public void actionPerformed(ActionEvent e) {
+            		game.newGame();
+            		mainPanel = new gamePanel(cardLayout);
+    	        	cardLayout.add(mainPanel);
+    	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
+    	        	c.revalidate();
+    	            c.repaint(); 
+            	}
+            });
     		btnReset.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
     				game.resetState();
@@ -463,7 +475,8 @@ public class Sokoban extends JFrame implements ActionListener{
     			}
     		});
     		
-    		//Stops game freezing after button press.
+    	//Stops game freezing after button press.
+    		btnNewGame.setFocusable(false);
     		btnReset.setFocusable(false);
             btnBack.setFocusable(false);
             btnMusic.setFocusable(false);
@@ -471,7 +484,7 @@ public class Sokoban extends JFrame implements ActionListener{
             cbSave.setFocusable(false);
             btnMenu.setFocusable(false);
             
-            buttons.add(btnMenu);
+            buttons.add(btnNewGame);
             buttons.add(btnReset);
             buttons.add(btnBack);
             buttons.add(btnMusic);
@@ -479,6 +492,7 @@ public class Sokoban extends JFrame implements ActionListener{
             buttons.add(cbMusic);
             buttons.add(lblSave);
             buttons.add(cbSave);
+            buttons.add(btnMenu);
             
             gbc.gridx++;
             gbc.anchor = GridBagConstraints.CENTER;
