@@ -149,8 +149,9 @@ public class Sokoban extends JFrame implements ActionListener{
         miHelp = new JMenuItem("About us...");
         mnuHelp.add(miHelp);
 
-        miBack.addActionListener(this);
-        miReset.addActionListener(this);
+        miStyle1.addActionListener(this);
+        miStyle2.addActionListener(this);
+        miStyle3.addActionListener(this);
         miExit.addActionListener(this);
         miMusic1.addActionListener(this);
         miMusic2.addActionListener(this);
@@ -361,7 +362,7 @@ public class Sokoban extends JFrame implements ActionListener{
     	
     	public menuPanel(JPanel contentPane) {
     		
-    		this.setLayout(new GridLayout(4, 1, 0, 50));
+    		this.setLayout(new GridLayout(4, 2, 0, 50));
     		this.setBackground(Color.orange);
     		
     		btnNew = new JButton(new ImageIcon("pic/new_button.png"));
