@@ -610,14 +610,6 @@ public class GameEngine {
         if(map[yLoc][xLoc] == BOX) {
             if (xLoc != 0) {
                 map = makeReachable(map, xLoc - 1, yLoc);
-            }else{
-                map = makeReachable(map, xLoc+1, yLoc);
-            }
-        }else if(map[yLoc][xLoc] == GOAL){
-            if(xLoc !=0) {
-                map = makeReachable(map, xLoc - 1, yLoc);
-            }else{
-                map = makeReachable(map, xLoc + 1, yLoc);
             }
         }
         int currxLoc = xLoc;
@@ -759,8 +751,11 @@ public class GameEngine {
             }
 
             for (int i = 0; i < box.length; i++) {
-                //System.out.printf("%d ", box[i]);
-                path.add(box[i]);
+                if(currPosX == box[1] && currPosY == box[0]){
+
+                }else {
+                    path.add(box[i]);
+                }
             }
             //System.out.printf("\n");
         }
