@@ -45,6 +45,12 @@ public class Sokoban extends JFrame implements ActionListener{
             "Go ahead"
 
     };
+    String saveName[] = {
+    	"Select Save",
+    	"Save 1",
+    	"Save 2",
+    	"Save 3"
+    };
     Music music;
     GameEngine game;
     Container c;
@@ -85,6 +91,7 @@ public class Sokoban extends JFrame implements ActionListener{
         c.add(cardLayout);
         this.setContentPane(c);
         this.pack();
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationByPlatform(true);
 
@@ -285,7 +292,12 @@ public class Sokoban extends JFrame implements ActionListener{
     class menuPanel extends JPanel {
     	
 		private static final long serialVersionUID = 6508884619039209211L;
-		private JButton btnNew, btnLoad, btnExit;	
+		private JButton btnNew, btnLoad, btnExit;
+		Object[] options = {
+				"Load Slot 1",
+                "Load Slot 2",
+                "Load Slot 3"
+        };
     	
     	public menuPanel(JPanel contentPane) {
     		this.setLayout(new GridLayout(4, 1, 0, 50));
@@ -303,14 +315,28 @@ public class Sokoban extends JFrame implements ActionListener{
     				mainPanel = new gamePanel(cardLayout);
     	        	cardLayout.add(mainPanel);
     	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
-    	        	c.revalidate();
-    	        	c.repaint();
     			}
     		});
     		btnLoad.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
+    				int n = JOptionPane.showOptionDialog(contentPane,
+    					    "Choose your game:",
+    					    "Load Game",
+    					    JOptionPane.YES_NO_CANCEL_OPTION,
+    					    JOptionPane.QUESTION_MESSAGE,
+    					    null,
+    					    options,
+    					    options[2]);
     				Completed = false;
     				menu = false;
+    				Save saveFile = new Save();
+    				if (saveFile.loadGame(n + 1, game)) {
+    					mainPanel = new gamePanel(cardLayout);
+    					cardLayout.add(mainPanel);
+        	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
+    				} else {
+    					JOptionPane.showMessageDialog(contentPane, "Load does not exist.", "Load Game", JOptionPane.WARNING_MESSAGE);
+    				}
     			}
     		});
     		btnExit.addActionListener(new ActionListener() {
@@ -339,7 +365,7 @@ public class Sokoban extends JFrame implements ActionListener{
     	
 		private static final long serialVersionUID = -3734882620271204708L;
 		private JButton btnReset, btnBack, btnMusic, btnMenu;
-    	private JComboBox<String> cbMusic;
+    	private JComboBox<String> cbMusic, cbSave;
     	private JPanel buttons;
     	
     	public gamePanel(JPanel contentPane) {
@@ -353,7 +379,7 @@ public class Sokoban extends JFrame implements ActionListener{
     		gbc.anchor = GridBagConstraints.NORTH;
             add(new MyPanel(game.getState().getCurrMap().getLocations()));
             buttons = new JPanel();
-            buttons.setLayout(new GridLayout(6, 1, 0, 20));
+            buttons.setLayout(new GridLayout(7, 1, 0, 20));
             buttons.setBackground(Color.orange);
     		
             btnReset = new JButton("Reset");
@@ -362,6 +388,8 @@ public class Sokoban extends JFrame implements ActionListener{
             JLabel lblMusic = new JLabel("Select Music:");
             cbMusic = new JComboBox<String>(musicName);
             cbMusic.addItemListener(this);
+            cbSave = new JComboBox<String>(saveName);
+            cbSave.addItemListener(this);
             btnMenu = new JButton("Main Menu");            
     		
     		btnReset.addActionListener(new ActionListener() {
@@ -413,6 +441,7 @@ public class Sokoban extends JFrame implements ActionListener{
             btnBack.setFocusable(false);
             btnMusic.setFocusable(false);
             cbMusic.setFocusable(false);
+            cbSave.setFocusable(false);
             btnMenu.setFocusable(false);
             
             buttons.add(btnReset);
@@ -420,6 +449,7 @@ public class Sokoban extends JFrame implements ActionListener{
             buttons.add(btnMusic);
             buttons.add(lblMusic);
             buttons.add(cbMusic);
+            buttons.add(cbSave);
             buttons.add(btnMenu);
             
             gbc.gridx++;
@@ -434,14 +464,18 @@ public class Sokoban extends JFrame implements ActionListener{
     	
     	@Override
         public void itemStateChanged(ItemEvent e) {
-            // TODO Auto-generated method stub
-            int index = cbMusic.getSelectedIndex();
-            String fileName = sMusic[index];
-            music.setMusic(fileName);
-            if(music.isPlay()){
-                music.stopMusic();
-                music.loadSound();
-            }
+    		if (e.getSource().equals(cbMusic)) {
+    			int index = cbMusic.getSelectedIndex();
+    			String fileName = sMusic[index];
+    			music.setMusic(fileName);
+    			if(music.isPlay()){
+    				music.stopMusic();
+    				music.loadSound();
+    			}
+    		} else if (e.getSource().equals(cbSave)) {
+    			Save saveFile = new Save();
+    			saveFile.saveGame(saveFile.matrixToString(game.getState().getCurrMap()), cbSave.getSelectedIndex());
+    		}
         }
     }
 
