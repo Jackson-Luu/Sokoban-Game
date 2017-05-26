@@ -412,6 +412,85 @@ public class GameEngine {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+    private static Boolean isReachable(int[][] map,int tilex,int tiley){
+        int startLocx;
+        int startLocy;
+        for(int i = 0; i < 15; i++){
+            for(int m = 0; m < 15; m++){
+                if(map[i][m] == PLAYER){
+                    startLocx = m;
+                    startLocy = i;
+                }
+            }
+        }
+        int[][] tempMap = new int[15][15];
+        for(int i = 0; i < 15; i++){
+            for(int m = 0; m < 15; m++){
+                tempMap[i][m] = map[i][m];
+            }
+        }
+
+        Boolean reachable = false;
+        Boolean noFloor = false;
+        final int REACH = 24;
+        while(!noFloor){
+            noFloor = true;
+            for(int i = 0; i < 15; i++){
+                for(int m = 0; m < 15; m++){
+                    if(tempMap[i][m] == FLOOR) {
+                        //check up
+                        noFloor = false;
+                        if (i != 0) {
+                            if(tempMap[i-1][m] == REACH || tempMap[i-1][m] == PLAYER){
+                                tempMap[i][m] = REACH;
+                            }
+                        }
+                        if(tempMap[i][m] == FLOOR && i != 14){
+                            if(tempMap[i+1][m] == REACH || tempMap[i+1][m] == PLAYER){
+                                tempMap[i][m] = REACH;
+                            }
+                        }
+                        if(tempMap[i][m] == FLOOR && m != 0){
+                            if(tempMap[i][m-1] == REACH || tempMap[i][m-1] == PLAYER){
+                                tempMap[i][m] = REACH;
+                            }
+                        }
+                        if(tempMap[i][m] == FLOOR && m != 14){
+                            if(tempMap[i][m+1] == REACH || tempMap[i][m+1] == PLAYER){
+                                tempMap[i][m] = REACH;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(tempMap[tiley][tilex] == GOAL || tempMap[tiley][tilex] == BOX){
+            if (tiley != 0) {
+                if(tempMap[tiley-1][tilex] == REACH || tempMap[tiley-1][tilex] == PLAYER){
+                    reachable = true;
+                }
+            }
+            if(tiley != 14){
+                if(tempMap[tiley+1][tilex] == REACH || tempMap[tiley+1][tilex] == PLAYER){
+                    reachable = true;
+                }
+            }
+            if(tilex != 0){
+                if(tempMap[tiley][tilex-1] == REACH || tempMap[tiley][tilex-1] == PLAYER){
+                    reachable = true;
+                }
+            }
+            if(tilex != 14){
+                if(tempMap[tiley][tilex+1] == REACH || tempMap[tiley][tilex+1] == PLAYER){
+                    reachable = true;
+                }
+            }
+        }else if(tempMap[tiley][tilex] == REACH){
+            reachable = true;
+        }
+
+        return reachable;
+    }
 
     /**
      * Move boxes from starting positions to goal positions,
@@ -426,34 +505,41 @@ public class GameEngine {
         ArrayList<Integer> path = new ArrayList<Integer>();
         for (int p = 0; p < amt; p++) {
             int dir = genRandom(0, 8);
-            //bias towards moving goals down and right, away from starting pos
             if (dir == 0) {
                 if (box[0] > 0 && box[0] < map.length - 1) {
-                    if (map[box[0] - 1][box[1]] == FLOOR)
-                        //push up
-                        box[0]--;
-                    else p--;
+                    if(!inPath(path,box[0]-1,box[1])){
+                        if (map[box[0] - 1][box[1]] == FLOOR)
+                            //push up
+                            box[0]--;
+                        else p--;
+                    }
                 }
             } else if (dir >= 1 && dir <= 3) {
                 if (box[0] > 0 && box[0] < map.length - 1) {
-                    if (map[box[0] + 1][box[1]] == FLOOR)
-                        //push down
-                        box[0]++;
-                    else p--;
+                    if(!inPath(path,box[0]+1,box[1])){
+                        if (map[box[0] + 1][box[1]] == FLOOR)
+                            //push down
+                            box[0]++;
+                        else p--;
+                    }
                 }
             } else if (dir == 4) {
                 if (box[1] > 0 && box[1] < map.length - 1) {
-                    if (map[box[0]][box[1] - 1] == FLOOR)
-                        //push left
-                        box[1]--;
-                    else p--;
+                    if(!inPath(path,box[0],box[1]-1)){
+                        if (map[box[0]][box[1] - 1] == FLOOR)
+                            //push left
+                            box[1]--;
+                        else p--;
+                    }
                 }
             } else if (dir >= 5 && dir <= 7) {
                 if (box[1] > 0 && box[1] < map.length - 1) {
-                    if (map[box[0]][box[1] + 1] == FLOOR)
-                        //push right
-                        box[1]++;
-                    else p--;
+                    if(!inPath(path,box[0],box[1]+1)){
+                        if (map[box[0]][box[1] + 1] == FLOOR)
+                            //push right
+                            box[1]++;
+                        else p--;
+                    }
                 }
             }
 
@@ -466,6 +552,14 @@ public class GameEngine {
         return path;
     }
 
+    private static Boolean inPath(ArrayList<Integer> path, int y, int x){
+        for(int i =0; i < path.size(); i+=2){
+            if(path.get(i) == y && path.get(i+1) == x){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private Boolean checkValid(int move){
         //if tile is empty
@@ -584,8 +678,12 @@ public class GameEngine {
                     functionMap.changeTile(xLoc,yLoc,Map.GOAL_BOX);
                 }
             }
-        }else{
-            functionMap.changeTile(xLoc,yLoc,move);
+        }else {
+            if (functionMap.checkTile(xLoc, yLoc) >= Map.MOVE_UP && functionMap.checkTile(xLoc, yLoc) <= Map.MOVE_LEFT) {
+                functionMap.changeTile(xLoc, yLoc, move);
+            }else if(functionMap.checkTile(xLoc, yLoc) >= Map.MOVE_UP+8 && functionMap.checkTile(xLoc, yLoc) <= Map.MOVE_LEFT+8){
+                functionMap.changeTile(xLoc,yLoc,move+8);
+            }
         }
         GameState updated = new GameState(functionMap,0,0);
         currGame = updated;
