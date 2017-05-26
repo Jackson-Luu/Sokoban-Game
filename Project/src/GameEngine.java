@@ -38,7 +38,7 @@ public class GameEngine {
      */
     public int[][] generateMap(int x, int y) {
         int[][] map = new int[x][y];
-        int boxes = genRandom(2,5); // upper bound is exclusive
+        int boxes = genRandom(3,6); // upper bound is exclusive
         final int b = boxes;
         int goals = boxes;
         System.out.printf("Boxes: %d, Goals: %d, \n", boxes, goals);
