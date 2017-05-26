@@ -68,7 +68,7 @@ public class Sokoban extends JFrame implements ActionListener{
      * @param currGame
      */
     public Sokoban(GameEngine currGame){
-        super("Game 2017");
+        super("Warehouse Boss");
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image image = toolkit.getImage("pic/0.png");
