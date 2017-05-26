@@ -471,6 +471,7 @@ public class Sokoban extends JFrame implements ActionListener{
             cbSave.setFocusable(false);
             btnMenu.setFocusable(false);
             
+            buttons.add(btnMenu);
             buttons.add(btnReset);
             buttons.add(btnBack);
             buttons.add(btnMusic);
@@ -478,7 +479,6 @@ public class Sokoban extends JFrame implements ActionListener{
             buttons.add(cbMusic);
             buttons.add(lblSave);
             buttons.add(cbSave);
-            buttons.add(btnMenu);
             
             gbc.gridx++;
             gbc.anchor = GridBagConstraints.CENTER;
