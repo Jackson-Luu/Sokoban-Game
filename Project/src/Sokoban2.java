@@ -215,7 +215,6 @@ public class Sokoban extends JFrame implements ActionListener{
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-
             if (key == KeyEvent.VK_LEFT) {
                 game.makeMove(Map.MOVE_LEFT);               
             }
@@ -247,7 +246,7 @@ public class Sokoban extends JFrame implements ActionListener{
     /**
      *
      */
-    private class MyPanel fextends JPanel{
+    private class MyPanel extends JPanel{
 
         private static final long serialVersionUID = 1L;
         private int[][] oriMap;
