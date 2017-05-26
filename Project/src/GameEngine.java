@@ -27,7 +27,7 @@ public class GameEngine {
     private static final int GOAL = Map.GOAL;
     private static final int PLAYER = Map.MOVE_DOWN;
 
-    private static final int WALL_DENSITY = 8;  // changes the amount of walls generated
+    private static final int WALL_DENSITY = 10;  // changes the amount of walls generated
     // lower number = less walls. Range 0..10
 
     /**
