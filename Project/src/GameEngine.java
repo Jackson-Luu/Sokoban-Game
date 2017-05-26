@@ -742,4 +742,8 @@ public class GameEngine {
         }
         return true;
     }
+    
+    public void setState(GameState setState){
+        currGame = setState;
+    }
 }
