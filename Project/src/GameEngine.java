@@ -737,7 +737,7 @@ public class GameEngine {
         if(unpushables > 3 && diagAlert > 3)return false;
         return true;
     }
-    
+
     /**
      * Move boxes from starting positions to goal positions,
      * keeping track of the path.
@@ -750,6 +750,8 @@ public class GameEngine {
         System.out.printf("amt: %d\n", amt);
         ArrayList<Integer> path = new ArrayList<Integer>();
         for (int p = 0; p < amt; p++) {
+            int currPosX = box[1];
+            int currPosY = box[0];
             int dir = genRandom(0, 8);
             if (dir == 0) {
                 if (box[0] > 0 && box[0] < map.length - 1) {
