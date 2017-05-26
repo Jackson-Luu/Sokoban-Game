@@ -165,8 +165,26 @@ public class Sokoban extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(game.isFinished() && !Completed){
             Completed = true;
-            String finished = "You Win!";
-            JOptionPane.showMessageDialog(this, finished, "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+            Object messages[] = {
+            	"OK",
+            	"New Game"
+            };
+            int n = JOptionPane.showOptionDialog(this,
+				    "You Win!",
+				    "Congratulations!",
+				    JOptionPane.YES_NO_OPTION,
+				    JOptionPane.INFORMATION_MESSAGE,
+				    null,
+				    messages,
+				    messages[0]);
+            if (n == 1) {
+            	game.newGame();
+				Completed = false;
+				menu = false;
+				mainPanel = new gamePanel(cardLayout);
+	        	cardLayout.add(mainPanel);
+	        	((CardLayout)cardLayout.getLayout()).next(cardLayout);
+            }
         }
         if(e.getSource().equals(miHelp)){
             String str = "COMP2911\n";
@@ -323,9 +341,18 @@ public class Sokoban extends JFrame implements ActionListener{
     		this.setLayout(new GridLayout(4, 1, 0, 50));
     		this.setBackground(Color.orange);
     		
-    		btnNew = new JButton("New Game");
-    		btnLoad = new JButton("Load Game");
-    		btnExit = new JButton("Exit Game");
+    		btnNew = new JButton(new ImageIcon("pic/new_button.png"));
+    		btnNew.setBorder(BorderFactory.createEmptyBorder());
+    		btnNew.setContentAreaFilled(false);
+    		btnNew.setPressedIcon(new ImageIcon("pic/new_selected.png"));
+    		btnLoad = new JButton(new ImageIcon("pic/load_button.png"));
+    		btnLoad.setBorder(BorderFactory.createEmptyBorder());
+    		btnLoad.setContentAreaFilled(false);
+    		btnLoad.setPressedIcon(new ImageIcon("pic/load_selected.png"));
+    		btnExit = new JButton(new ImageIcon("pic/exit_button.png"));
+    		btnExit.setBorder(BorderFactory.createEmptyBorder());
+    		btnExit.setContentAreaFilled(false);
+    		btnExit.setPressedIcon(new ImageIcon("pic/exit_selected.png"));
     		
     		btnNew.addActionListener(new ActionListener() {
     			public void actionPerformed(ActionEvent e) {
