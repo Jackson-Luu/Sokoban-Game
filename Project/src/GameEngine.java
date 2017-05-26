@@ -700,6 +700,45 @@ public class GameEngine {
         return map;
     }
     /**
+     *  Checks if boxes on the current map are pushable enough so that it is solvable
+     * @param map current map
+     * @return - boolean of whether test is a success or not
+     */
+    private Boolean pushableCheck(int[][] map){
+        //find all the boxes
+        ArrayList<Integer> boxes = new ArrayList<Integer>();
+        for(int i = 0; i < 15; i++){
+            for(int m = 0; m < 15; m++){
+                if(map[i][m] == BOX){
+                    boxes.add(i);
+                    boxes.add(m);
+                }
+            }
+        }
+        int unpushables = 0;
+        int currBoxX;
+        int currBoxY;
+        int diagAlert = 0;
+        for(int i = 0; i < boxes.size(); i+=2){
+            currBoxX = boxes.get(i+1);
+            currBoxY = boxes.get(i);
+
+            if((map[currBoxY][currBoxX-1] != FLOOR || map[currBoxY][currBoxX-1] != GOAL) && (map[currBoxY][currBoxX+1] != FLOOR || map[currBoxY][currBoxX+1] != GOAL)){
+                //unpushable by x
+                if((map[currBoxY-1][currBoxX] != FLOOR || map[currBoxY-1][currBoxX] != GOAL) && (map[currBoxY+1][currBoxX] != FLOOR || map[currBoxY+1][currBoxX] != GOAL)){
+                    //unpushable by y
+                    unpushables++;
+                }
+            }
+            if(map[currBoxY-1][currBoxX-1] == BOX || map[currBoxY-1][currBoxX+1] == BOX || map[currBoxY+1][currBoxX+1] == BOX || map[currBoxY+1][currBoxX+1] == BOX){
+                diagAlert++;
+            }
+        }
+        if(unpushables > 3 && diagAlert > 3)return false;
+        return true;
+    }
+    
+    /**
      * Move boxes from starting positions to goal positions,
      * keeping track of the path.
      * @param map - current map
