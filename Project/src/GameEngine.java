@@ -38,12 +38,11 @@ public class GameEngine {
      */
     public int[][] generateMap(int x, int y) {
         int[][] map = new int[x][y];
-        int boxes = genRandom(2,5); // upper bound is exclusive
+        int boxes = genRandom(2,5);
         final int b = boxes;
         int goals = boxes;
         System.out.printf("Boxes: %d, Goals: %d, \n", boxes, goals);
         int nextTile;
-
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 map[i][j] = FLOOR;
@@ -124,7 +123,7 @@ public class GameEngine {
                             generate = false;
                         }
                     }
-                    if(generate == true)map[i][j] = WALL;
+                    if(generate) map[i][j] = WALL;
 
                 }
 
@@ -206,6 +205,55 @@ public class GameEngine {
                 }
             }
             if(spawned)break;
+        }
+
+        //make sure boxes are reachable
+        for (int i = 0; i < boxLocation.length; i++) {
+            if (!isReachable(map, boxLocation[i][0], boxLocation[i][1])) {
+                //map[boxLocation[i][1]][boxLocation[i][0]] = FLOOR;
+                int playerX = 0, playerY = 0;
+                for (int c = 0; c < x; c++) {
+                    for (int d = 0; d < y; d++) {
+                        if(map[c][d] == PLAYER){
+                            playerX = d;
+                            playerY = c;
+                        }
+                    }
+                }
+                Boolean reached = (playerX == boxLocation[i][0] && playerY == boxLocation[i][1]);
+                ArrayList<Integer> p = new ArrayList<Integer>();
+                while(!reached) {
+                    if (playerX < boxLocation[i][0]) {
+                        playerX++;
+                        p.add(playerX);
+                        p.add(playerY);
+                    } else if (playerX > boxLocation[i][0]) {
+                        playerX--;
+                        p.add(playerX);
+                        p.add(playerY);
+                    }
+                    if (playerY < boxLocation[i][1]) {
+                        playerY++;
+                        p.add(playerX);
+                        p.add(playerY);
+                    } else if (playerY > boxLocation[i][1]) {
+                        playerY--;
+                        p.add(playerX);
+                        p.add(playerY);
+                    }
+                    if (playerX == boxLocation[i][0] && playerY == boxLocation[i][1]) {
+                        reached = true;
+                    }
+
+                }
+                for (int q = 0; q < p.size(); q += 2) {
+                    if (map[p.get(q)][p.get(q+1)] == WALL) {
+                        map[p.get(q)][p.get(q+1)] = FLOOR;
+                        System.out.printf("DELETING WALL AT: %d, %d", p.get(q), p.get(q+1));
+                    }
+                }
+
+            }
         }
 
         // debug
@@ -351,6 +399,7 @@ public class GameEngine {
      * @param map - current map
      * @return - map with inaccessible floor tiles filled in
      */
+
     public int[][] removeBubbles(int[][] map){
         /*
             Let 1 = next to wall
@@ -444,6 +493,14 @@ public class GameEngine {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+
+    /**
+     * Checks if certain tiles (boxes and goals) can be reached from the player's starting location
+     * @param map - current map
+     * @param tilex - x-coord of tile to check
+     * @param tiley - y-coord of tile to check
+     * @return true if reachable, else false
+     */
     private static Boolean isReachable(int[][] map,int tilex,int tiley){
         System.out.println("XD");
         int startLocx;
@@ -468,7 +525,7 @@ public class GameEngine {
         int runs = 0;
         final int REACH = 24;
         Boolean changed = true;
-        while(!noFloor && changed == true){
+        while(!noFloor && changed){
             System.out.println("XD");
             runs++;
             noFloor = true;
